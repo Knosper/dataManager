@@ -5,7 +5,7 @@ include $(ENV_FILE)
 
 VOLUMES := $(BACKEND_VOLUME) $(FRONTEND_VOLUME)
 
-DOCKER_COMPOSE := docker compose --env-file=$(ENV_FILE)
+DOCKER_COMPOSE := docker compose --env-file=$(ENV_FILE) 
 
 all: build
 
@@ -13,7 +13,7 @@ $(VOLUMES):
 	mkdir -p $(VOLUMES)
 
 build: | $(VOLUMES)
-	$(DOCKER_COMPOSE) up --build
+	$(DOCKER_COMPOSE) up --build 
 
 clean:
 	$(DOCKER_COMPOSE) down
@@ -27,8 +27,8 @@ re: clean
 .PHONY: all build clean fclean re
 
 
-#config:
-#	$(DOCKER_COMPOSE) config --format=json | jq
+config:
+	$(DOCKER_COMPOSE) config --format=json | jq
 
 prune:
 	docker system prune --all --force --volumes

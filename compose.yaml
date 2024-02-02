@@ -30,6 +30,9 @@ services:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    volumes:
+      - './backend:/app'
+      - '/app/node_modules'
     depends_on:
       - postgres
     environment:
@@ -39,14 +42,20 @@ services:
     networks:
       - internal
 
-  electron-frontend:
-    container_name: electron-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile # Ensure this Dockerfile is the one prepared for Electron
-    ports:
-      - '8080:8080' # Map the port if needed, otherwise remove this line
-    networks:
-      - internal
-    depends_on:
-      - cpp-app # If the frontend depends on the backend app
+  #frontend:
+  #  container_name: react-frontend
+  #  build:
+  #    context: ./frontend
+  #    dockerfile: Dockerfile
+  #  volumes:
+  #    - './frontend:/app'
+  #    - '/app/node_modules'
+  #  ports:
+  #    - '3000:3000'
+  #  environment:
+  #    - NODE_ENV=development
+  #  networks:
+  #    - internal
+  #  depends_on:
+  #    - cpp-app # if the frontend depends on the backend service being ready
+  #  restart: unless-stopped
