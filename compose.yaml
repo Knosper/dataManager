@@ -42,20 +42,18 @@ services:
     networks:
       - internal
 
-  #frontend:
-  #  container_name: react-frontend
-  #  build:
-  #    context: ./frontend
-  #    dockerfile: Dockerfile
-  #  volumes:
-  #    - './frontend:/app'
-  #    - '/app/node_modules'
-  #  ports:
-  #    - '3000:3000'
-  #  environment:
-  #    - NODE_ENV=development
-  #  networks:
-  #    - internal
-  #  depends_on:
-  #    - cpp-app # if the frontend depends on the backend service being ready
-  #  restart: unless-stopped
+  frontend:
+    container_name: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - './frontend:/app'
+      - '/app/node_modules'
+    ports:
+      - '3000:3000'  # Map the port of your frontend app (adjust if your app uses a different port)
+    depends_on:
+      - cpp-app  # If your frontend needs to wait for your backend to be up, you can use depends_on
+    networks:
+      - internal
+    restart: unless-stopped
