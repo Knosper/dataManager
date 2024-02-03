@@ -1,21 +1,25 @@
-# Start from the latest Alpine image
-FROM alpine:latest
+# Start from Ubuntu image
+FROM ubuntu:latest
 
 # Install C++ build environment, PostgreSQL client library, and dependencies for libpqxx
-RUN apk add --no-cache \
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
     clang \
     make \
-    postgresql-dev \
     g++ \
-    cmake \
-    git
+    libpq-dev \
+	libpqxx-dev \
+    qtbase5-dev
 
-# Download and build libpqxx
-RUN git clone --recursive https://github.com/jtv/libpqxx.git \
-    && cd libpqxx \
-    && cmake -DCMAKE_INSTALL_PREFIX=/usr . \
-    && make \
-    && make install
+# Install Xfce and related components
+RUN apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    x11-apps \
+    xfce4 \
+    xfce4-terminal \
+    dbus-x11 \
+    firefox \
+    && apt-get clean
 
 # Copy your source code into the container
 COPY . /usr/src/app
@@ -23,9 +27,7 @@ COPY . /usr/src/app
 # Set the working directory to where you copied your source code
 WORKDIR /usr/src/app
 
-# Build your C++ application
-RUN make
+# Set the default user (replace 'user' with your username)
 
-#CMD ["./dataManager"]
-
-CMD ["tail", "-f", "/dev/null"]
+# Start the Xfce desktop environment
+CMD ["startxfce4"]

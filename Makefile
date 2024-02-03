@@ -3,6 +3,9 @@ NAME := DataController
 ENV_FILE := .env
 include $(ENV_FILE)
 
+# Get the host UID dynamically
+HOST_UID := $(shell id -u)
+
 VOLUMES := $(BACKEND_VOLUME) $(FRONTEND_VOLUME)
 
 DOCKER_COMPOSE := docker compose --env-file=$(ENV_FILE) 
@@ -13,7 +16,7 @@ $(VOLUMES):
 	mkdir -p $(VOLUMES)
 
 build: | $(VOLUMES)
-	$(DOCKER_COMPOSE) up --build 
+	USER=$(HOST_UID) $(DOCKER_COMPOSE) up --build
 
 clean:
 	$(DOCKER_COMPOSE) down
