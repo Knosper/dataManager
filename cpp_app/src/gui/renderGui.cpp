@@ -22,52 +22,101 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+static bool initializeWindow(const char* glsl_version, GLFWwindow** outWindow) {
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit()) {
+        std::cerr << "Failed to initialize GLFW." << std::endl;
+        return false;
+    }
+
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+
+    *outWindow = glfwCreateWindow(1280, 720, "Database Crawler", NULL, NULL);
+    if (*outWindow == NULL) {
+        std::cerr << "Failed to create GLFW window." << std::endl;
+        glfwTerminate();
+        return false;
+    }
+
+    glfwMakeContextCurrent(*outWindow);
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+        glfwDestroyWindow(*outWindow);
+        glfwTerminate();
+        return false;
+    }
+
+    glfwSwapInterval(1); // Enable vsync
+    return true;
+}
+
+bool setupImGui(GLFWwindow* window, const char* glsl_version,  ImGuiIO* io) {
+    // Check for valid window pointer
+    if (!window) {
+        std::cerr << "setupImGui: Provided GLFWwindow pointer is null." << std::endl;
+        return false;
+    }
+
+    // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    *io = ImGui::GetIO(); (void)io;
+    ImGui::StyleColorsDark();
+
+    if (!ImGui_ImplGlfw_InitForOpenGL(window, true)) {
+        std::cerr << "Failed to initialize ImGui GLFW." << std::endl;
+        return false;
+    }
+    if (!ImGui_ImplOpenGL3_Init(glsl_version)) {
+        std::cerr << "Failed to initialize ImGui OpenGL." << std::endl;
+        return false;
+    }
+
+    return true;
+}
+
+void cleanup(GLFWwindow* window) {
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    if (window) {
+        glfwDestroyWindow(window);
+    }
+    glfwTerminate();
+}
 
 // Main code
 int render_gui()
 {
- // Setup window
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit())
-        return 1;
-    const char* glsl_version = "#version 130";
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Database Crawler", NULL, NULL);
-    if (window == NULL)
-        return 1;
-    
-    glfwMakeContextCurrent(window);
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        // Problem: glewInit failed, something is seriously wrong.
-        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+    const char* glsl_version = "#version 130";
+    GLFWwindow* window;
+    if (!initializeWindow(glsl_version, &window))
+    {
+        std::cerr << "Shutdown App." << std::endl;
         glfwDestroyWindow(window);
         glfwTerminate();
-        return -1;
+        return (-1);
     }
-   // glewExperimental = GL_TRUE; // Needed for core profile
-    glfwSwapInterval(1); // Enable vsync
-
     GLuint backgroundTextureID = loadImage(_THUB_PATH, window);
     if (backgroundTextureID == 0) {
         // Handle the error, maybe exit the application
         std::cerr << "Failed to load the background texture." << std::endl;
         glfwDestroyWindow(window);
         glfwTerminate();
+        return (-1);
+    }
+    ImGuiIO io;
+    // Setup ImGui binding
+    if (!setupImGui(window, glsl_version, &io))
+    {
+        std::cerr << "Failed to setup ImGui." << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
         return -1;
     }
-
-    // Setup ImGui binding
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    ImGuiIO& io = ImGui::GetIO(); (void)io;
-    ImGui::StyleColorsDark();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
-
     //MyStuff //TODO: if User has database credits already delivered, then dont use default params!
     Macros params;
 
@@ -103,11 +152,6 @@ int render_gui()
     }
 
     // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwDestroyWindow(window);
-    glfwTerminate();
-
+    cleanup(window);
     return 0;
 }
