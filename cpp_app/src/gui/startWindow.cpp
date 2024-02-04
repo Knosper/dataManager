@@ -31,10 +31,11 @@ GLuint loadImage(const char* imagePath, GLFWwindow* window)
     // Load the texture data
 
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-
     glGenerateMipmap(GL_TEXTURE_2D);
-    std::cout << "texture loaded!" << std::endl;
-
+    GLenum error = glGetError();
+    if (error != GL_NO_ERROR) {
+        std::cerr << "OpenGL Error after glGenerateMipmap: " << error << std::endl;
+    }
     // Free the image memory and unbind the texture
     stbi_image_free(data);
     glBindTexture(GL_TEXTURE_2D, 0);

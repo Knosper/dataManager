@@ -40,6 +40,14 @@ int render_gui()
         return 1;
     
     glfwMakeContextCurrent(window);
+    GLenum err = glewInit();
+    if (GLEW_OK != err) {
+        // Problem: glewInit failed, something is seriously wrong.
+        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
    // glewExperimental = GL_TRUE; // Needed for core profile
     glfwSwapInterval(1); // Enable vsync
 
