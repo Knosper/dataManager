@@ -22,6 +22,7 @@ static void glfw_error_callback(int error, const char* description)
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+
 // Main code
 int render_gui()
 {
@@ -29,17 +30,27 @@ int render_gui()
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit())
         return 1;
-    
     const char* glsl_version = "#version 130";
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
     // Create window with graphics context
-    GLFWwindow* window = glfwCreateWindow(1280, 720, "Database Configuration", NULL, NULL);
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Database Crawler", NULL, NULL);
     if (window == NULL)
         return 1;
+    
     glfwMakeContextCurrent(window);
+   // glewExperimental = GL_TRUE; // Needed for core profile
     glfwSwapInterval(1); // Enable vsync
+
+    GLuint backgroundTextureID = loadImage(_THUB_PATH, window);
+    if (backgroundTextureID == 0) {
+        // Handle the error, maybe exit the application
+        std::cerr << "Failed to load the background texture." << std::endl;
+        glfwDestroyWindow(window);
+        glfwTerminate();
+        return -1;
+    }
 
     // Setup ImGui binding
     IMGUI_CHECKVERSION();
@@ -59,7 +70,17 @@ int render_gui()
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        showDatabaseConfigWindow(params); // Show the database configuration window
+        // Draw the background image
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
+        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+        ImGui::SetWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y), ImGuiCond_Always);
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), ImGui::GetWindowSize());
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+        // Show the database configuration window
+        showDatabaseConfigWindow(params);
 
         // Rendering
         ImGui::Render();

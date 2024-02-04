@@ -1,6 +1,8 @@
 #pragma once
 #include <iostream>
 
+#define _THUB_PATH "misc/Thub.jpg"
+
 class Macros
 {
 private:

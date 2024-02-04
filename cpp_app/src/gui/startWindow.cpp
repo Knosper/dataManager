@@ -1,5 +1,46 @@
 #include "Macros.hpp"
 #include "imgui.h"
+#include "Gui.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+
+GLuint loadImage(const char* imagePath, GLFWwindow* window)
+{
+    // Load the image using stb_image
+    int width, height, channels;
+    unsigned char* data = stbi_load(imagePath, &width, &height, &channels, 4); // 4 for RGBA
+    if (data == nullptr) {
+        std::cerr << "Failed to load image: " << imagePath << std::endl;
+        return 0;
+    }
+    // Create a texture
+    GLuint textureID;
+
+
+    glGenTextures(1, &textureID);
+
+    glBindTexture(GL_TEXTURE_2D, textureID);
+
+    // Set the texture wrapping and filtering options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    // Load the texture data
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
+    std::cout << "texture loaded!" << std::endl;
+
+    // Free the image memory and unbind the texture
+    stbi_image_free(data);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    return textureID;
+}
 
 void showDatabaseConfigWindow(Macros& params)
 {

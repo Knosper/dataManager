@@ -1,5 +1,10 @@
 #pragma once
+
+#define GLEW_STATIC // Only define this if you are statically linking GLEW
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 #include "Macros.hpp"
 
-int render_gui();
+GLuint loadImage(const char* imagePath, GLFWwindow* window);
 void showDatabaseConfigWindow(Macros& params);
+int render_gui();
