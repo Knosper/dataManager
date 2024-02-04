@@ -6,17 +6,17 @@ include $(ENV_FILE)
 # Get the host UID dynamically
 HOST_UID := $(shell id -u)
 
-VOLUMES := $(BACKEND_VOLUME) $(FRONTEND_VOLUME)
+#VOLUMES := $(BACKEND_VOLUME) $(FRONTEND_VOLUME)
 
 DOCKER_COMPOSE := docker compose --env-file=$(ENV_FILE) 
 
 all: build
 
-$(VOLUMES):
-	mkdir -p $(VOLUMES)
+#$(VOLUMES):
+#	mkdir -p $(VOLUMES)
 
-build: | $(VOLUMES)
-	USER=$(HOST_UID) $(DOCKER_COMPOSE) up --build
+build: #| $(VOLUMES)
+	$(DOCKER_COMPOSE) up --build
 
 clean:
 	$(DOCKER_COMPOSE) down
