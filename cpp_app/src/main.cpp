@@ -12,7 +12,7 @@ int main()
         std::cout << "No connection to the database!" << std::endl;
     }*/
 
-    render_gui();
+    appGui();
 
     return (0);
 }
