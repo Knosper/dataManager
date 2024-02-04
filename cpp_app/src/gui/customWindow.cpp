@@ -6,7 +6,6 @@
 #endif
 #include "stb_image.h"
 
-
 GLuint loadImage(const char* imagePath, GLFWwindow* window)
 {
     // Load the image using stb_image

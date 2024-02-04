@@ -6,4 +6,4 @@
 
 GLuint loadImage(const char* imagePath, GLFWwindow* window);
 void showDatabaseConfigWindow(Macros& params);
-int render_gui();
+int appGui(Macros& params);

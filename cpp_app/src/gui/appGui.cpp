@@ -77,7 +77,8 @@ bool setupImGui(GLFWwindow* window, const char* glsl_version,  ImGuiIO* io) {
     return true;
 }
 
-void cleanup(GLFWwindow* window) {
+void cleanup(GLFWwindow* window)
+{
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -87,8 +88,43 @@ void cleanup(GLFWwindow* window) {
     glfwTerminate();
 }
 
+bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, Macros* params)
+{
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Draw the background image
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
+        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+        ImGui::SetWindowSize(ImVec2(io->DisplaySize.x, io->DisplaySize.y), ImGuiCond_Always);
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), ImGui::GetWindowSize());
+        ImGui::End();
+        ImGui::PopStyleVar();
+
+        // Show the database configuration window
+        showDatabaseConfigWindow(*params);
+
+        // Rendering
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(window);
+    }
+    //TODO: CHeck for errors here
+    return (EXIT_SUCCESS);
+}
+
 // Main code
-int render_gui()
+int appGui(Macros& params)
 {
     // Create window with graphics context
     const char* glsl_version = "#version 130";
@@ -96,8 +132,6 @@ int render_gui()
     if (!initializeWindow(glsl_version, &window))
     {
         std::cerr << "Shutdown App." << std::endl;
-        glfwDestroyWindow(window);
-        glfwTerminate();
         return (-1);
     }
     GLuint backgroundTextureID = loadImage(_THUB_PATH, window);
@@ -117,39 +151,14 @@ int render_gui()
         glfwTerminate();
         return -1;
     }
-    //MyStuff //TODO: if User has database credits already delivered, then dont use default params!
-    Macros params;
-
-    // Main loop
-    while (!glfwWindowShouldClose(window)) {
-        glfwPollEvents();
-        ImGui_ImplOpenGL3_NewFrame();
-        ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
-
-        // Draw the background image
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-        ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
-        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-        ImGui::SetWindowSize(ImVec2(io.DisplaySize.x, io.DisplaySize.y), ImGuiCond_Always);
-        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), ImGui::GetWindowSize());
-        ImGui::End();
-        ImGui::PopStyleVar();
-
-        // Show the database configuration window
-        showDatabaseConfigWindow(params);
-
-        // Rendering
-        ImGui::Render();
-        int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
-        glViewport(0, 0, display_w, display_h);
-        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
-        glClear(GL_COLOR_BUFFER_BIT);
-        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
+    if (mainLoop(window, &io, backgroundTextureID, &params))
+    {
+        std::cerr << "An error occurred during the main loop." << std::endl;
+        cleanup(window);
+        return (EXIT_FAILURE);
     }
+    //TODO: if User has database credits already delivered, then dont use default params!
     // Cleanup
     cleanup(window);
-    return 0;
+    return (EXIT_SUCCESS);
 }
