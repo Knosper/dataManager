@@ -1,7 +1,6 @@
 .env
 env.sh
 obj/*
-frontend/node_modules
-backend/node_modules
+cpp_app/dataManager
 *.ini
 *.o
