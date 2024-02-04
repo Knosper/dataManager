@@ -3,14 +3,16 @@
 
 int main()
 {
-    Macros params;
+    /*Macros params;
 
-    if (params._dataBaseConnection)
+    if (params.getDatabaseConnection())
     {
         std::cout << "Connection established!" << std::endl;
-        render_gui();
     } else {
         std::cout << "No connection to the database!" << std::endl;
-    }
+    }*/
+
+    render_gui();
+
     return (0);
 }
