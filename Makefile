@@ -1,5 +1,3 @@
-NAME := DataController
-
 ENV_FILE := .env
 include $(ENV_FILE)
 

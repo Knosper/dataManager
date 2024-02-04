@@ -8,6 +8,8 @@ IMGUI_DIR := ../../imgui
 # Define the directory for object files
 OBJDIR := obj
 
+DIRS := $(OBJDIR) $(OBJDIR)/gui $(OBJDIR)/utils
+
 # Define the C++ source files for ImGui and for your project
 IMGUI_SOURCES := $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 IMGUI_SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
@@ -30,36 +32,40 @@ MAIN := dataManager
 
 .PHONY: all clean
 
-all: $(MAIN)
+all: directories $(MAIN)
 	@echo dataManager has been compiled
+
+# Create directories target
+directories: | $(DIRS)
+
+$(DIRS):
+	@mkdir -p $@
 
 # Main target depends on project and ImGui object files
 $(MAIN): $(OBJS) $(IMGUI_OBJS)
 	$(CXX) -o $@ $^ $(CXXFLAGS) $(LIBS)
 
 # Pattern rule for project source files in the root src directory
-$(OBJDIR)/%.o: src/%.cpp
-	@mkdir -p $(OBJDIR)
+$(OBJDIR)/%.o: src/%.cpp | $(OBJDIR)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
+
 # Pattern rule for project source files in the src/gui directory
-$(OBJDIR)/gui/%.o: src/gui/%.cpp
-	@mkdir -p $(OBJDIR)/gui
+$(OBJDIR)/gui/%.o: src/gui/%.cpp | $(OBJDIR)/gui
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Pattern rule for project source files in the src/utils directory
-$(OBJDIR)/utils/%.o: src/utils/%.cpp
-	@mkdir -p $(OBJDIR)/utils
+$(OBJDIR)/utils/%.o: src/utils/%.cpp | $(OBJDIR)/utils
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Pattern rule for ImGui source files
 $(OBJDIR)/%.o: $(IMGUI_DIR)/%.cpp
-	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(OBJDIR)/%.o: $(IMGUI_DIR)/backends/%.cpp
-	@mkdir -p $(OBJDIR)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(MAIN): | directories
 
 clean:
 	@echo Cleaning...
