@@ -11,16 +11,10 @@ int main()
     } else {
         std::cout << "No connection to the database!" << std::endl;
     }*/
-<<<<<<< HEAD
     if (appGui(params))
     {
         std::cout << "Error main.cpp!" << std::endl;
         return (EXIT_FAILURE);
     }
-=======
-
-    appGui();
-
->>>>>>> 3537d906568f46dfcb1b1be80b5e6dc1f349a199
     return (0);
 }
