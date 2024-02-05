@@ -2,7 +2,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
-#include "Gui.hpp"
+#include "AppGui.hpp"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -91,9 +91,6 @@ void cleanup(GLFWwindow* window)
 }
 
 // ########################### Utility functions ###########################
-/*
-
-*/
 void renderMenuBar(T_data& params)
 {
     if (ImGui::BeginMainMenuBar())
@@ -180,7 +177,6 @@ void renderMenuBar(T_data& params)
 
 void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
 {
-
     //render background image
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
@@ -222,42 +218,6 @@ bool mainLoop(T_data* params)
     return (EXIT_SUCCESS);
 }
 
-int loadIcons(T_data* params)
-{
-    params->addIconTextureID(_ICON_APPERANCE, loadImage(_ICON_APPERANCE, params->getWindow()));
-    params->addIconTextureID(_ICON_DATABASE_BACKUP, loadImage(_ICON_DATABASE_BACKUP, params->getWindow()));
-    params->addIconTextureID(_ICON_BUG, loadImage(_ICON_BUG, params->getWindow()));
-    params->addIconTextureID(_ICON_CREATE_DATABASE, loadImage(_ICON_CREATE_DATABASE, params->getWindow()));
-    params->addIconTextureID(_ICON_DATABASE_LOGS, loadImage(_ICON_DATABASE_LOGS, params->getWindow()));
-    params->addIconTextureID(_ICON_DATABASE, loadImage(_ICON_DATABASE, params->getWindow()));
-    params->addIconTextureID(_ICON_DELETE_DATABASE, loadImage(_ICON_DELETE_DATABASE, params->getWindow()));
-    params->addIconTextureID(_ICON_DOCS, loadImage(_ICON_DOCS, params->getWindow()));
-    params->addIconTextureID(_ICON_DATABASE_EXPORT, loadImage(_ICON_DATABASE_EXPORT, params->getWindow()));
-    params->addIconTextureID(_ICON_HELP, loadImage(_ICON_HELP, params->getWindow()));
-    params->addIconTextureID(_ICON_DATABASE_IMPORT, loadImage(_ICON_DATABASE_IMPORT, params->getWindow()));
-    params->addIconTextureID(_ICON_LIST_DATABASE, loadImage(_ICON_LIST_DATABASE, params->getWindow()));
-    params->addIconTextureID(_ICON_MANAGE_CONNECTION, loadImage(_ICON_MANAGE_CONNECTION, params->getWindow()));
-    params->addIconTextureID(_ICON_NEW_CONNECTION, loadImage(_ICON_NEW_CONNECTION, params->getWindow()));
-    params->addIconTextureID(_ICON_PREFERENCES, loadImage(_ICON_PREFERENCES, params->getWindow()));
-    params->addIconTextureID(_ICON_RESTORE, loadImage(_ICON_RESTORE, params->getWindow()));
-    params->addIconTextureID(_ICON_SETTINGS, loadImage(_ICON_SETTINGS, params->getWindow()));
-    params->addIconTextureID(_ICON_TOOLS, loadImage(_ICON_TOOLS, params->getWindow()));
-    params->addIconTextureID(_ICON_UPDATE, loadImage(_ICON_UPDATE, params->getWindow()));
-    params->addIconTextureID(_ICON_VISUALIZE_DATABASE, loadImage(_ICON_VISUALIZE_DATABASE, params->getWindow()));
-    if (params->getIconTextureID(_ICON_APPERANCE) == 0 || params->getIconTextureID(_ICON_BUG) == 0 || params->getIconTextureID(_ICON_CREATE_DATABASE) == 0 \
-    || params->getIconTextureID(_ICON_DATABASE_LOGS) == 0 || params->getIconTextureID(_ICON_DOCS) == 0 || params->getIconTextureID(_ICON_LIST_DATABASE) == 0 || \
-    params->getIconTextureID(_ICON_MANAGE_CONNECTION) == 0 || params->getIconTextureID(_ICON_NEW_CONNECTION) == 0 || params->getIconTextureID(_ICON_PREFERENCES) == 0 || \
-    params->getIconTextureID(_ICON_UPDATE) == 0 || params->getIconTextureID(_ICON_VISUALIZE_DATABASE) == 0 )
-    {
-        // Handle the error, maybe exit the application
-        std::cerr << "Failed to load Icons textures." << std::endl;
-        glfwDestroyWindow(params->getWindow());
-        glfwTerminate();
-        return (EXIT_FAILURE);
-    }
-    return (EXIT_SUCCESS);
-}
-
 // ########################### Main app ###########################
 int initGui(T_data& params)
 {
@@ -274,7 +234,7 @@ int initGui(T_data& params)
     params.setWindow(window);
     params.setIo(&io);
     // Load BackgroundTexture
-    GLuint backgroundTextureID = loadImage(_THUB_PATH, params.getWindow());
+    GLuint backgroundTextureID = params.loadImage(_THUB_PATH);
     if (backgroundTextureID == 0)
     {
         // Handle the error, maybe exit the application
@@ -285,13 +245,8 @@ int initGui(T_data& params)
     }
     params.setBackgroundTextureID(backgroundTextureID);
 
-    if (loadIcons(&params))
-    {
-        std::cerr << "Failed to load icons." << std::endl;
-        glfwDestroyWindow(params.getWindow());
-        glfwTerminate();
-        return (EXIT_FAILURE);
-    }
+    params.loadIcons();
+
     // Setup ImGui binding
     if (!setupImGui(params))
     {

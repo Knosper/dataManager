@@ -44,22 +44,21 @@ public:
     T_data();
     ~T_data();
 
-    // Setter methods
+    // Setter methods in tData.cpp
     void addIconTextureID(const std::string& name, GLuint textureID);
+    void loadIcons();
+    GLuint loadImage(const char* imagePath);
+
+    // Setter methods
     void setBackgroundTextureID(const GLuint backgroundTextureID) { _backgroundTextureID = backgroundTextureID; }
     void setWindow(GLFWwindow* window) { _window = window; }
     void setIo(ImGuiIO* io) { _io = io; }
 
+    // Getter methods in tData.cpp
+    GLuint getIconTextureID(const std::string& name) const;
+
     // Getter methods
     GLuint getBackgroundTextureID() const { return _backgroundTextureID; }
-    GLuint getIconTextureID(const std::string& name) const
-    {
-        auto it = _iconTextureIDs.find(name);
-        if (it != _iconTextureIDs.end()) {
-            return it->second;
-        }
-        return (0);
-    }
     GLFWwindow* getWindow() { return _window; }
     ImGuiIO* getIo() { return _io; }
 };

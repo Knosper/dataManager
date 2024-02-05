@@ -1,44 +1,6 @@
-#include "tData.hpp"
+/*#include "tData.hpp"
 #include "imgui.h"
-#include "Gui.hpp"
-#ifndef STB_IMAGE_IMPLEMENTATION
-#define STB_IMAGE_IMPLEMENTATION
-#endif
-#include "stb_image.h"
-
-GLuint loadImage(const char* imagePath, GLFWwindow* window)
-{
-    // Load the image using stb_image
-    int width, height, channels;
-    unsigned char* data = stbi_load(imagePath, &width, &height, &channels, 4);
-    if (data == nullptr) {
-        std::cerr << "Failed to load image: " << imagePath << std::endl;
-        return 0;
-    }
-    // Create a texture
-    GLuint textureID;
-    glGenTextures(1, &textureID);
-    glBindTexture(GL_TEXTURE_2D, textureID);
-
-    // Set the texture wrapping and filtering options
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-    // Load the texture data
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-    GLenum error = glGetError();
-    if (error != GL_NO_ERROR) {
-        std::cerr << "OpenGL Error after glGenerateMipmap: " << error << std::endl;
-    }
-    // Free the image memory and unbind the texture
-    stbi_image_free(data);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    return textureID;
-}
+#include "AppGui.hpp"
 
 void showDatabaseConfigWindow(T_data& params)
 {
@@ -72,11 +34,7 @@ void showDatabaseConfigWindow(T_data& params)
 
     if (ImGui::Button("Connect", ImVec2(ImGui::GetContentRegionAvail().x, 0))) {
         // Attempt to connect to the database and provide feedback
-        /*if (attemptDatabaseConnection(params)) {
-            ImGui::OpenPopup("Connection Success!");
-        } else {
-            ImGui::OpenPopup("Connection Failed!");
-        }*/
+
     }
     ImGui::End();
-}
+}*/
