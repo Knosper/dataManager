@@ -17,42 +17,8 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
-// Error handling and callback functions
-static void glfw_error_callback(int error, const char* description)
-{
-    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
-}
-
 //########################### Initialization functions ########################
-static bool initializeWindow(GLFWwindow** outWindow) {
-    glfwSetErrorCallback(glfw_error_callback);
-    if (!glfwInit()) {
-        std::cerr << "Failed to initialize GLFW." << std::endl;
-        return false;
-    }
 
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-
-    *outWindow = glfwCreateWindow(1280, 720, "Sql-Crawler 🔍", NULL, NULL);
-    if (*outWindow == NULL) {
-        std::cerr << "Failed to create GLFW window." << std::endl;
-        glfwTerminate();
-        return false;
-    }
-
-    glfwMakeContextCurrent(*outWindow);
-    GLenum err = glewInit();
-    if (GLEW_OK != err) {
-        fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
-        glfwDestroyWindow(*outWindow);
-        glfwTerminate();
-        return false;
-    }
-
-    glfwSwapInterval(1); // Enable vsync
-    return true;
-}
 
 bool setupImGui(T_data &params) {
     const char* glsl_version = "#version 130";
@@ -221,31 +187,9 @@ bool mainLoop(T_data* params)
 // ########################### Main app ###########################
 int initGui(T_data& params)
 {
-    // Create window with graphics context
-    ImGuiIO io;
-    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-    GLFWwindow* window;
-    if (!initializeWindow(&window))
-    {
-        std::cerr << "Shutdown App." << std::endl;
-        //TODO: Try recover and restart.
-        return (-1);
-    }
-    params.setWindow(window);
-    params.setIo(&io);
-    // Load BackgroundTexture
-    GLuint backgroundTextureID = params.loadImage(_THUB_PATH);
-    if (backgroundTextureID == 0)
-    {
-        // Handle the error, maybe exit the application
-        std::cerr << "Failed to load the background texture." << std::endl;
-        glfwDestroyWindow(params.getWindow());
-        glfwTerminate();
+    //init window && io && textures
+    if (params.initImgui())
         return (EXIT_FAILURE);
-    }
-    params.setBackgroundTextureID(backgroundTextureID);
-
-    params.loadIcons();
 
     // Setup ImGui binding
     if (!setupImGui(params))
