@@ -97,12 +97,15 @@ bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, Macro
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
+        // Fetch the new window size
+        ImVec2 windowSize = ImGui::GetIO().DisplaySize;
+
         // Draw the background image
         ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
         ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-        ImGui::SetWindowSize(ImVec2(io->DisplaySize.x, io->DisplaySize.y), ImGuiCond_Always);
-        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), ImGui::GetWindowSize());
+        ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), windowSize);
         ImGui::End();
         ImGui::PopStyleVar();
 
