@@ -42,20 +42,6 @@ GLuint loadImage(const char* imagePath, GLFWwindow* window)
 
 void showDatabaseConfigWindow(T_data& params)
 {
-    /*static char dbHost[255] = "";
-    strncpy(dbHost, params.getDatabaseHost().c_str(), sizeof(dbHost) - 1);
-    dbHost[sizeof(dbHost) - 1] = '\0';
-    static char dbName[255] = "";
-    strncpy(dbName, params.getDatabaseName().c_str(), sizeof(dbName) - 1);
-    dbName[sizeof(dbName) - 1] = '\0';
-    static char dbUser[255] = "";
-    strncpy(dbUser, params.getUsername().c_str(), sizeof(dbUser) - 1);
-    dbUser[sizeof(dbUser) - 1] = '\0';
-    static char dbPass[255] = "";
-    strncpy(dbPass, params.getPassword().c_str(), sizeof(dbPass) - 1);
-    dbPass[sizeof(dbPass) - 1] = '\0';
-    static int dbPort = params.getDatabasePort();*/
-
     static char dbHost[255] = "";
     static char dbName[255] = "";
     static char dbUser[255] = "";
@@ -73,7 +59,6 @@ void showDatabaseConfigWindow(T_data& params)
 
     // Begin the window
     ImGui::Begin("Init Database", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
-
 
     // Input fields with labels
     ImGui::InputText("Host", dbHost, IM_ARRAYSIZE(dbHost));
@@ -93,19 +78,5 @@ void showDatabaseConfigWindow(T_data& params)
             ImGui::OpenPopup("Connection Failed!");
         }*/
     }
-
-    // Popups for connection feedback
-    if (ImGui::BeginPopupModal("Connection Success!", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Connected to the database successfully.");
-        if (ImGui::Button("OK")) { ImGui::CloseCurrentPopup(); }
-        ImGui::EndPopup();
-    }
-
-    if (ImGui::BeginPopupModal("Connection Failed!", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
-        ImGui::Text("Failed to connect to the database.");
-        if (ImGui::Button("OK")) { ImGui::CloseCurrentPopup(); }
-        ImGui::EndPopup();
-    }
-
     ImGui::End();
 }

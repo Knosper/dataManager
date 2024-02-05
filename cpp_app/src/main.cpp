@@ -11,7 +11,7 @@ int main()
     } else {
         std::cout << "No connection to the database!" << std::endl;
     }*/
-    if (appGui(params))
+    if (initGui(params))
     {
         std::cout << "Error main.cpp!" << std::endl;
         return (EXIT_FAILURE);

@@ -91,19 +91,87 @@ void cleanup(GLFWwindow* window)
 }
 
 // ########################### Utility functions ###########################
+/*
+
+*/
 void renderMenuBar(T_data& params)
 {
-    if (ImGui::BeginMainMenuBar()) {
-
-        //small icon
-        ImGui::Image((void*)(intptr_t)params.getIconTextureID(), ImVec2(18, 18));
-        // Add some spacing after the icon
+    if (ImGui::BeginMainMenuBar())
+    {
+        ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE), ImVec2(18, 18)); 
         ImGui::SameLine();
+        if (ImGui::BeginMenu("Database"))
+        {
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_LIST_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("List Databases"))
+            {
+                std::cout << "List all detected databases" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_NEW_CONNECTION), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("New Connection"))
+            {
+                std::cout << "Open the 'New Connection' Input window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_MANAGE_CONNECTION), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Manage Connections")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_IMPORT), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Import Connection")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_EXPORT), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Export Connection")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_CREATE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Create Database")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DELETE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Delete Database")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_BACKUP), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Backup Database")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_RESTORE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Restore Database")) { /* ... */ }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_TOOLS), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Tools"))
+        {
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_VISUALIZE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Visualize Database")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_LOGS), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Database Logs")) { /* ... */ }
 
-        if (ImGui::BeginMenu("Connections")) {
-            if (ImGui::MenuItem("Connection 1")) { /* ... */ }
-            if (ImGui::MenuItem("Connection 2")) { /* ... */ }
-            if (ImGui::MenuItem("Connection 3")) { /* ... */ }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_SETTINGS), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Settings"))
+        {
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_PREFERENCES), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Preferences")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_APPERANCE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Appearance")) { /* ... */ }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_HELP), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Help"))
+        {
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DOCS), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Docs")) { /* ... */ }
+            ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_UPDATE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Check for Updates")) { /* ... */ }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
@@ -154,8 +222,44 @@ bool mainLoop(T_data* params)
     return (EXIT_SUCCESS);
 }
 
+int loadIcons(T_data* params)
+{
+    params->addIconTextureID(_ICON_APPERANCE, loadImage(_ICON_APPERANCE, params->getWindow()));
+    params->addIconTextureID(_ICON_DATABASE_BACKUP, loadImage(_ICON_DATABASE_BACKUP, params->getWindow()));
+    params->addIconTextureID(_ICON_BUG, loadImage(_ICON_BUG, params->getWindow()));
+    params->addIconTextureID(_ICON_CREATE_DATABASE, loadImage(_ICON_CREATE_DATABASE, params->getWindow()));
+    params->addIconTextureID(_ICON_DATABASE_LOGS, loadImage(_ICON_DATABASE_LOGS, params->getWindow()));
+    params->addIconTextureID(_ICON_DATABASE, loadImage(_ICON_DATABASE, params->getWindow()));
+    params->addIconTextureID(_ICON_DELETE_DATABASE, loadImage(_ICON_DELETE_DATABASE, params->getWindow()));
+    params->addIconTextureID(_ICON_DOCS, loadImage(_ICON_DOCS, params->getWindow()));
+    params->addIconTextureID(_ICON_DATABASE_EXPORT, loadImage(_ICON_DATABASE_EXPORT, params->getWindow()));
+    params->addIconTextureID(_ICON_HELP, loadImage(_ICON_HELP, params->getWindow()));
+    params->addIconTextureID(_ICON_DATABASE_IMPORT, loadImage(_ICON_DATABASE_IMPORT, params->getWindow()));
+    params->addIconTextureID(_ICON_LIST_DATABASE, loadImage(_ICON_LIST_DATABASE, params->getWindow()));
+    params->addIconTextureID(_ICON_MANAGE_CONNECTION, loadImage(_ICON_MANAGE_CONNECTION, params->getWindow()));
+    params->addIconTextureID(_ICON_NEW_CONNECTION, loadImage(_ICON_NEW_CONNECTION, params->getWindow()));
+    params->addIconTextureID(_ICON_PREFERENCES, loadImage(_ICON_PREFERENCES, params->getWindow()));
+    params->addIconTextureID(_ICON_RESTORE, loadImage(_ICON_RESTORE, params->getWindow()));
+    params->addIconTextureID(_ICON_SETTINGS, loadImage(_ICON_SETTINGS, params->getWindow()));
+    params->addIconTextureID(_ICON_TOOLS, loadImage(_ICON_TOOLS, params->getWindow()));
+    params->addIconTextureID(_ICON_UPDATE, loadImage(_ICON_UPDATE, params->getWindow()));
+    params->addIconTextureID(_ICON_VISUALIZE_DATABASE, loadImage(_ICON_VISUALIZE_DATABASE, params->getWindow()));
+    if (params->getIconTextureID(_ICON_APPERANCE) == 0 || params->getIconTextureID(_ICON_BUG) == 0 || params->getIconTextureID(_ICON_CREATE_DATABASE) == 0 \
+    || params->getIconTextureID(_ICON_DATABASE_LOGS) == 0 || params->getIconTextureID(_ICON_DOCS) == 0 || params->getIconTextureID(_ICON_LIST_DATABASE) == 0 || \
+    params->getIconTextureID(_ICON_MANAGE_CONNECTION) == 0 || params->getIconTextureID(_ICON_NEW_CONNECTION) == 0 || params->getIconTextureID(_ICON_PREFERENCES) == 0 || \
+    params->getIconTextureID(_ICON_UPDATE) == 0 || params->getIconTextureID(_ICON_VISUALIZE_DATABASE) == 0 )
+    {
+        // Handle the error, maybe exit the application
+        std::cerr << "Failed to load Icons textures." << std::endl;
+        glfwDestroyWindow(params->getWindow());
+        glfwTerminate();
+        return (EXIT_FAILURE);
+    }
+    return (EXIT_SUCCESS);
+}
+
 // ########################### Main app ###########################
-int appGui(T_data& params)
+int initGui(T_data& params)
 {
     // Create window with graphics context
     ImGuiIO io;
@@ -171,7 +275,8 @@ int appGui(T_data& params)
     params.setIo(&io);
     // Load BackgroundTexture
     GLuint backgroundTextureID = loadImage(_THUB_PATH, params.getWindow());
-    if (backgroundTextureID == 0) {
+    if (backgroundTextureID == 0)
+    {
         // Handle the error, maybe exit the application
         std::cerr << "Failed to load the background texture." << std::endl;
         glfwDestroyWindow(params.getWindow());
@@ -180,16 +285,13 @@ int appGui(T_data& params)
     }
     params.setBackgroundTextureID(backgroundTextureID);
 
-    GLuint iconTextureID = loadImage(_ICON_PATH, params.getWindow());
-    if (iconTextureID == 0) {
-        // Handle the error, maybe exit the application
-        std::cerr << "Failed to load the background texture." << std::endl;
+    if (loadIcons(&params))
+    {
+        std::cerr << "Failed to load icons." << std::endl;
         glfwDestroyWindow(params.getWindow());
         glfwTerminate();
         return (EXIT_FAILURE);
     }
-    params.setIconTextureID(iconTextureID);
-
     // Setup ImGui binding
     if (!setupImGui(params))
     {

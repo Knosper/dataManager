@@ -4,4 +4,4 @@
 
 GLuint loadImage(const char* imagePath, GLFWwindow* window);
 void showDatabaseConfigWindow(GLFWwindow* window, T_data& params);
-int appGui(T_data& params);
+int initGui(T_data& params);
