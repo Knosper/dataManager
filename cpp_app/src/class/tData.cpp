@@ -1,4 +1,7 @@
 #include "tData.hpp"
+/* Do this:
+      #define STB_IMAGE_IMPLEMENTATION
+   before you include this file (stb_image.h) in *one* C or C++ file to create the implementation.*/
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
 #endif
