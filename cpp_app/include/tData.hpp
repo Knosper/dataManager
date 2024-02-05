@@ -3,7 +3,7 @@
 
 #define _THUB_PATH "misc/Thub.jpg"
 
-class Macros
+class T_data
 {
 private:
     bool        _dataBaseConnection;
@@ -19,8 +19,8 @@ public:
     bool        _status;
 
     //Constructor Destructor
-    Macros();
-    ~Macros();
+    T_data();
+    ~T_data();
 
     // Setter methods
     void setDatabaseConnection(const bool& status) { _dataBaseConnection = status; }

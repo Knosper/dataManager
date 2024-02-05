@@ -17,11 +17,13 @@
 #include "../libs/emscripten/emscripten_mainloop_stub.h"
 #endif
 
+// Error handling and callback functions
 static void glfw_error_callback(int error, const char* description)
 {
     fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
+//########################### Initialization functions ########################
 static bool initializeWindow(const char* glsl_version, GLFWwindow** outWindow) {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) {
@@ -77,6 +79,7 @@ bool setupImGui(GLFWwindow* window, const char* glsl_version,  ImGuiIO* io) {
     return true;
 }
 
+// ########################### Cleanup function ###########################
 void cleanup(GLFWwindow* window)
 {
     ImGui_ImplOpenGL3_Shutdown();
@@ -88,7 +91,35 @@ void cleanup(GLFWwindow* window)
     glfwTerminate();
 }
 
-bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, Macros* params)
+// ########################### Utility functions ###########################
+void renderMenuBar()
+{
+    if (ImGui::BeginMainMenuBar()) {
+        if (ImGui::BeginMenu("Connections")) {
+            if (ImGui::MenuItem("Connection 1")) { /* ... */ }
+            if (ImGui::MenuItem("Connection 2")) { /* ... */ }
+            if (ImGui::MenuItem("Connection 3")) { /* ... */ }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
+
+void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
+{
+
+    //render background image
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+    ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
+    ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
+    ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), windowSize);
+    ImGui::End();
+    ImGui::PopStyleVar();
+}
+
+// ########################### MainLoop ###########################
+bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
 {
     while (!glfwWindowShouldClose(window))
     {
@@ -100,18 +131,9 @@ bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, Macro
         // Fetch the new window size
         ImVec2 windowSize = ImGui::GetIO().DisplaySize;
 
-        // Draw the background image
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-        ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
-        ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
-        ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
-        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(backgroundTextureID)), windowSize);
-        ImGui::End();
-        ImGui::PopStyleVar();
-
-        // Show the database configuration window
-        showDatabaseConfigWindow(*params);
-
+        //set params to render
+        renderBackground(windowSize, backgroundTextureID);
+        renderMenuBar();
         // Rendering
         ImGui::Render();
         int display_w, display_h;
@@ -126,15 +148,19 @@ bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, Macro
     return (EXIT_SUCCESS);
 }
 
-// Main code
-int appGui(Macros& params)
+// ########################### Main app ###########################
+int appGui(T_data& params)
 {
+    ImGuiIO io;
     // Create window with graphics context
     const char* glsl_version = "#version 130";
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
+
     GLFWwindow* window;
     if (!initializeWindow(glsl_version, &window))
     {
         std::cerr << "Shutdown App." << std::endl;
+        //TODO: Try recover and restart.
         return (-1);
     }
     GLuint backgroundTextureID = loadImage(_THUB_PATH, window);
@@ -145,7 +171,7 @@ int appGui(Macros& params)
         glfwTerminate();
         return (-1);
     }
-    ImGuiIO io;
+
     // Setup ImGui binding
     if (!setupImGui(window, glsl_version, &io))
     {
@@ -160,7 +186,6 @@ int appGui(Macros& params)
         cleanup(window);
         return (EXIT_FAILURE);
     }
-    //TODO: if User has database credits already delivered, then dont use default params!
     // Cleanup
     cleanup(window);
     return (EXIT_SUCCESS);

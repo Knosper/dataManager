@@ -1,16 +1,16 @@
-#include "Macros.hpp"
+#include "tData.hpp"
 
-Macros::Macros():_dataBaseConnection(false), _databaseType(""), _databaseHost(""), _databasePort(0), _databaseName(""), _username(""), _password(""), _status(false)
+T_data::T_data():_dataBaseConnection(false), _databaseType(""), _databaseHost(""), _databasePort(0), _databaseName(""), _username(""), _password(""), _status(false)
 {
     std::cout << "default Macros created" << std::endl; 
 }
 
-Macros::~Macros()
+T_data::~T_data()
 {
     std::cout << "Macros deleted" << std::endl; 
 }
 
-bool Macros::connectToDatabase()
+bool T_data::connectToDatabase()
 {
     // Implement database connection logic here
     // You can use the member variables like _databaseType, _username, etc.

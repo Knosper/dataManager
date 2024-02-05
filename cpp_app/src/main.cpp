@@ -1,9 +1,9 @@
 #include "Gui.hpp"
-#include "Macros.hpp"
+#include "tData.hpp"
 
 int main()
 {
-    Macros params;
+    T_data params;
 
     /*if (params.getDatabaseConnection())
     {
@@ -16,5 +16,5 @@ int main()
         std::cout << "Error main.cpp!" << std::endl;
         return (EXIT_FAILURE);
     }
-    return (0);
+    return (EXIT_SUCCESS);
 }

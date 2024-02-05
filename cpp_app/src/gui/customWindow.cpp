@@ -1,4 +1,4 @@
-#include "Macros.hpp"
+#include "tData.hpp"
 #include "imgui.h"
 #include "Gui.hpp"
 #ifndef STB_IMAGE_IMPLEMENTATION
@@ -40,34 +40,87 @@ GLuint loadImage(const char* imagePath, GLFWwindow* window)
     return textureID;
 }
 
-void showDatabaseConfigWindow(Macros& params)
+bool attemptDatabaseConnection(T_data& params)
+{
+    // Here you would use params to connect to your database.
+    // This is highly dependent on what database you're using and how your application is structured.
+    // For demonstration, let's just print out the parameters:
+
+    std::cout << "Attempting to connect to database with the following parameters:" << std::endl;
+    std::cout << "Host: " << params.getDatabaseHost() << std::endl;
+    std::cout << "Database Name: " << params.getDatabaseName() << std::endl;
+    std::cout << "User: " << params.getUsername() << std::endl;
+    // Be careful with logging passwords; it's generally a bad practice.
+    std::cout << "Password: " << params.getPassword() << std::endl;
+    std::cout << "Port: " << params.getDatabasePort() << std::endl;
+
+    // Here you would actually attempt the connection.
+    // For now, let's just pretend the connection was successful:
+    bool connectionSuccessful = true; // You should replace this with your actual connection logic.
+
+    return connectionSuccessful;
+}
+
+void showDatabaseConfigWindow(GLFWwindow* window, T_data& params)
 {
     static char dbHost[255] = "";
+    strncpy(dbHost, params.getDatabaseHost().c_str(), sizeof(dbHost) - 1);
+    dbHost[sizeof(dbHost) - 1] = '\0';
     static char dbName[255] = "";
+    strncpy(dbName, params.getDatabaseName().c_str(), sizeof(dbName) - 1);
+    dbName[sizeof(dbName) - 1] = '\0';
     static char dbUser[255] = "";
+    strncpy(dbUser, params.getUsername().c_str(), sizeof(dbUser) - 1);
+    dbUser[sizeof(dbUser) - 1] = '\0';
     static char dbPass[255] = "";
-    static int dbPort = 0;
+    strncpy(dbPass, params.getPassword().c_str(), sizeof(dbPass) - 1);
+    dbPass[sizeof(dbPass) - 1] = '\0';
+    static int dbPort = params.getDatabasePort();
 
-    ImGui::Begin("Database Configuration");
+    // Get the main window's position and size
+    int main_window_x, main_window_y;
+    int main_window_width, main_window_height;
+    glfwGetWindowPos(window, &main_window_x, &main_window_y);
+    glfwGetWindowSize(window, &main_window_width, &main_window_height);
 
+    // Set the position of the database config window within the boundaries
+    ImGui::SetNextWindowPos(ImVec2(main_window_x, main_window_y), ImGuiCond_FirstUseEver, ImVec2(0, 0));
+    ImGui::SetNextWindowSizeConstraints(ImVec2(300, 200), ImVec2(main_window_width, main_window_height));
+
+    // Begin the window
+    ImGui::Begin("Init Database", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_AlwaysAutoResize);
+
+
+    // Input fields with labels
     ImGui::InputText("Host", dbHost, IM_ARRAYSIZE(dbHost));
     ImGui::InputText("Database Name", dbName, IM_ARRAYSIZE(dbName));
     ImGui::InputText("User", dbUser, IM_ARRAYSIZE(dbUser));
-    ImGui::InputText("Password", dbPass, IM_ARRAYSIZE(dbPass));
+    ImGui::InputText("Password", dbPass, IM_ARRAYSIZE(dbPass), ImGuiInputTextFlags_Password);
     ImGui::InputInt("Port", &dbPort);
 
-    if (ImGui::Button("Connect")) {
-        params.setDatabaseHost(dbHost);
-        params.setDatabaseName(dbName);
-        params.setUsername(dbUser);
-        params.setPassword(dbPass);
-        params.setDatabasePort(dbPort);
+    // Space between input fields and buttons
+    ImGui::Spacing();
 
-        if (params.connectToDatabase()) {
-            std::cout << "Connection established!" << std::endl;
+    if (ImGui::Button("Connect", ImVec2(ImGui::GetContentRegionAvail().x, 0))) {
+        // Attempt to connect to the database and provide feedback
+        if (attemptDatabaseConnection(params)) {
+            ImGui::OpenPopup("Connection Success!");
         } else {
-            std::cout << "Failed to connect to the database." << std::endl;
+            ImGui::OpenPopup("Connection Failed!");
         }
+    }
+
+    // Popups for connection feedback
+    if (ImGui::BeginPopupModal("Connection Success!", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Connected to the database successfully.");
+        if (ImGui::Button("OK")) { ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
+    }
+
+    if (ImGui::BeginPopupModal("Connection Failed!", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+        ImGui::Text("Failed to connect to the database.");
+        if (ImGui::Button("OK")) { ImGui::CloseCurrentPopup(); }
+        ImGui::EndPopup();
     }
 
     ImGui::End();
