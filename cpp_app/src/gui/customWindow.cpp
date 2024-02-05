@@ -40,30 +40,9 @@ GLuint loadImage(const char* imagePath, GLFWwindow* window)
     return textureID;
 }
 
-bool attemptDatabaseConnection(T_data& params)
+void showDatabaseConfigWindow(T_data& params)
 {
-    // Here you would use params to connect to your database.
-    // This is highly dependent on what database you're using and how your application is structured.
-    // For demonstration, let's just print out the parameters:
-
-    std::cout << "Attempting to connect to database with the following parameters:" << std::endl;
-    std::cout << "Host: " << params.getDatabaseHost() << std::endl;
-    std::cout << "Database Name: " << params.getDatabaseName() << std::endl;
-    std::cout << "User: " << params.getUsername() << std::endl;
-    // Be careful with logging passwords; it's generally a bad practice.
-    std::cout << "Password: " << params.getPassword() << std::endl;
-    std::cout << "Port: " << params.getDatabasePort() << std::endl;
-
-    // Here you would actually attempt the connection.
-    // For now, let's just pretend the connection was successful:
-    bool connectionSuccessful = true; // You should replace this with your actual connection logic.
-
-    return connectionSuccessful;
-}
-
-void showDatabaseConfigWindow(GLFWwindow* window, T_data& params)
-{
-    static char dbHost[255] = "";
+    /*static char dbHost[255] = "";
     strncpy(dbHost, params.getDatabaseHost().c_str(), sizeof(dbHost) - 1);
     dbHost[sizeof(dbHost) - 1] = '\0';
     static char dbName[255] = "";
@@ -75,13 +54,18 @@ void showDatabaseConfigWindow(GLFWwindow* window, T_data& params)
     static char dbPass[255] = "";
     strncpy(dbPass, params.getPassword().c_str(), sizeof(dbPass) - 1);
     dbPass[sizeof(dbPass) - 1] = '\0';
-    static int dbPort = params.getDatabasePort();
+    static int dbPort = params.getDatabasePort();*/
 
+    static char dbHost[255] = "";
+    static char dbName[255] = "";
+    static char dbUser[255] = "";
+    static char dbPass[255] = "";
+    static int dbPort = 0;
     // Get the main window's position and size
     int main_window_x, main_window_y;
     int main_window_width, main_window_height;
-    glfwGetWindowPos(window, &main_window_x, &main_window_y);
-    glfwGetWindowSize(window, &main_window_width, &main_window_height);
+    glfwGetWindowPos(params.getWindow(), &main_window_x, &main_window_y);
+    glfwGetWindowSize(params.getWindow(), &main_window_width, &main_window_height);
 
     // Set the position of the database config window within the boundaries
     ImGui::SetNextWindowPos(ImVec2(main_window_x, main_window_y), ImGuiCond_FirstUseEver, ImVec2(0, 0));
@@ -103,11 +87,11 @@ void showDatabaseConfigWindow(GLFWwindow* window, T_data& params)
 
     if (ImGui::Button("Connect", ImVec2(ImGui::GetContentRegionAvail().x, 0))) {
         // Attempt to connect to the database and provide feedback
-        if (attemptDatabaseConnection(params)) {
+        /*if (attemptDatabaseConnection(params)) {
             ImGui::OpenPopup("Connection Success!");
         } else {
             ImGui::OpenPopup("Connection Failed!");
-        }
+        }*/
     }
 
     // Popups for connection feedback

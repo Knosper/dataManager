@@ -34,7 +34,7 @@ static bool initializeWindow(const char* glsl_version, GLFWwindow** outWindow) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    *outWindow = glfwCreateWindow(1280, 720, "Database Crawler", NULL, NULL);
+    *outWindow = glfwCreateWindow(1280, 720, "Sql-Crawler 🔍", NULL, NULL);
     if (*outWindow == NULL) {
         std::cerr << "Failed to create GLFW window." << std::endl;
         glfwTerminate();
@@ -92,9 +92,24 @@ void cleanup(GLFWwindow* window)
 }
 
 // ########################### Utility functions ###########################
-void renderMenuBar()
+void renderMenuBar(T_data& params)
 {
+    GLuint iconTextureID = loadImage(_ICON_PATH, params.getWindow());
+    if (iconTextureID == 0) {
+        // Handle the error, maybe exit the application
+        std::cerr << "Failed to load the background texture." << std::endl;
+        glfwDestroyWindow(params.getWindow());
+        glfwTerminate();
+        return;
+    }
+    params.setIconTextureID(iconTextureID);
     if (ImGui::BeginMainMenuBar()) {
+
+        //small icon
+        ImGui::Image((void*)(intptr_t)params.getIconTextureID(), ImVec2(18, 18));
+        // Add some spacing after the icon
+        ImGui::SameLine();
+
         if (ImGui::BeginMenu("Connections")) {
             if (ImGui::MenuItem("Connection 1")) { /* ... */ }
             if (ImGui::MenuItem("Connection 2")) { /* ... */ }
@@ -119,9 +134,9 @@ void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
 }
 
 // ########################### MainLoop ###########################
-bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
+bool mainLoop(ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
 {
-    while (!glfwWindowShouldClose(window))
+    while (!glfwWindowShouldClose(params->getWindow()))
     {
         glfwPollEvents();
         ImGui_ImplOpenGL3_NewFrame();
@@ -133,16 +148,16 @@ bool mainLoop(GLFWwindow* window, ImGuiIO* io, GLuint backgroundTextureID, T_dat
 
         //set params to render
         renderBackground(windowSize, backgroundTextureID);
-        renderMenuBar();
+        renderMenuBar(*params);
         // Rendering
         ImGui::Render();
         int display_w, display_h;
-        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glfwGetFramebufferSize(params->getWindow(), &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-        glfwSwapBuffers(window);
+        glfwSwapBuffers(params->getWindow());
     }
     //TODO: CHeck for errors here
     return (EXIT_SUCCESS);
@@ -163,30 +178,31 @@ int appGui(T_data& params)
         //TODO: Try recover and restart.
         return (-1);
     }
-    GLuint backgroundTextureID = loadImage(_THUB_PATH, window);
+    params.setWindow(window);
+    GLuint backgroundTextureID = loadImage(_THUB_PATH, params.getWindow());
     if (backgroundTextureID == 0) {
         // Handle the error, maybe exit the application
         std::cerr << "Failed to load the background texture." << std::endl;
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(params.getWindow());
         glfwTerminate();
         return (-1);
     }
 
     // Setup ImGui binding
-    if (!setupImGui(window, glsl_version, &io))
+    if (!setupImGui(params.getWindow(), glsl_version, &io))
     {
         std::cerr << "Failed to setup ImGui." << std::endl;
-        glfwDestroyWindow(window);
+        glfwDestroyWindow(params.getWindow());
         glfwTerminate();
         return -1;
     }
-    if (mainLoop(window, &io, backgroundTextureID, &params))
+    if (mainLoop(&io, backgroundTextureID, &params))
     {
         std::cerr << "An error occurred during the main loop." << std::endl;
-        cleanup(window);
+        cleanup(params.getWindow());
         return (EXIT_FAILURE);
     }
     // Cleanup
-    cleanup(window);
+    cleanup(params.getWindow());
     return (EXIT_SUCCESS);
 }
