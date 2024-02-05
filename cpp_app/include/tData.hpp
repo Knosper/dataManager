@@ -2,6 +2,7 @@
 #include <iostream>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include "imgui.h"
 
 #define _THUB_PATH "misc/Thub.jpg"
 #define _ICON_PATH "misc/Icon.jpg"
@@ -21,6 +22,7 @@ private:
     GLuint      _backgroundTextureID; //Path to image
     GLuint      _iconTextureID; //Path to Icon
     GLFWwindow* _window;        //App window
+    ImGuiIO*    _io;            //TODO: add description!
 
 public:
     //status
@@ -34,11 +36,13 @@ public:
     void setBackgroundTextureID(const GLuint backgroundTextureID) { _backgroundTextureID = backgroundTextureID; }
     void setIconTextureID(const GLuint iconTextureID) { _iconTextureID = iconTextureID; }
     void setWindow(GLFWwindow* window) { _window = window; }
+    void setIo(ImGuiIO* io) { _io = io; }
 
     // Getter methods
     GLuint getBackgroundTextureID() const { return _backgroundTextureID; }
     GLuint getIconTextureID() const { return _iconTextureID; }
     GLFWwindow* getWindow() { return _window; }
+    ImGuiIO* getIo() { return _io; }
 
 
     /*void setDatabaseConnection(const bool& status) { _dataBaseConnection = status; }

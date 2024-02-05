@@ -24,7 +24,7 @@ static void glfw_error_callback(int error, const char* description)
 }
 
 //########################### Initialization functions ########################
-static bool initializeWindow(const char* glsl_version, GLFWwindow** outWindow) {
+static bool initializeWindow(GLFWwindow** outWindow) {
     glfwSetErrorCallback(glfw_error_callback);
     if (!glfwInit()) {
         std::cerr << "Failed to initialize GLFW." << std::endl;
@@ -54,20 +54,20 @@ static bool initializeWindow(const char* glsl_version, GLFWwindow** outWindow) {
     return true;
 }
 
-bool setupImGui(GLFWwindow* window, const char* glsl_version,  ImGuiIO* io) {
+bool setupImGui(T_data &params) {
+    const char* glsl_version = "#version 130";
     // Check for valid window pointer
-    if (!window) {
+    if (!params.getWindow()) {
         std::cerr << "setupImGui: Provided GLFWwindow pointer is null." << std::endl;
         return false;
     }
-
     // Initialize ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    *io = ImGui::GetIO(); (void)io;
+    params.setIo(&(ImGui::GetIO())); (void) params.getIo();
     ImGui::StyleColorsDark();
 
-    if (!ImGui_ImplGlfw_InitForOpenGL(window, true)) {
+    if (!ImGui_ImplGlfw_InitForOpenGL(params.getWindow(), true)) {
         std::cerr << "Failed to initialize ImGui GLFW." << std::endl;
         return false;
     }
@@ -75,7 +75,6 @@ bool setupImGui(GLFWwindow* window, const char* glsl_version,  ImGuiIO* io) {
         std::cerr << "Failed to initialize ImGui OpenGL." << std::endl;
         return false;
     }
-
     return true;
 }
 
@@ -94,15 +93,6 @@ void cleanup(GLFWwindow* window)
 // ########################### Utility functions ###########################
 void renderMenuBar(T_data& params)
 {
-    GLuint iconTextureID = loadImage(_ICON_PATH, params.getWindow());
-    if (iconTextureID == 0) {
-        // Handle the error, maybe exit the application
-        std::cerr << "Failed to load the background texture." << std::endl;
-        glfwDestroyWindow(params.getWindow());
-        glfwTerminate();
-        return;
-    }
-    params.setIconTextureID(iconTextureID);
     if (ImGui::BeginMainMenuBar()) {
 
         //small icon
@@ -134,7 +124,7 @@ void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
 }
 
 // ########################### MainLoop ###########################
-bool mainLoop(ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
+bool mainLoop(T_data* params)
 {
     while (!glfwWindowShouldClose(params->getWindow()))
     {
@@ -147,8 +137,9 @@ bool mainLoop(ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
         ImVec2 windowSize = ImGui::GetIO().DisplaySize;
 
         //set params to render
-        renderBackground(windowSize, backgroundTextureID);
+        renderBackground(windowSize, params->getBackgroundTextureID());
         renderMenuBar(*params);
+        
         // Rendering
         ImGui::Render();
         int display_w, display_h;
@@ -166,37 +157,48 @@ bool mainLoop(ImGuiIO* io, GLuint backgroundTextureID, T_data* params)
 // ########################### Main app ###########################
 int appGui(T_data& params)
 {
-    ImGuiIO io;
     // Create window with graphics context
-    const char* glsl_version = "#version 130";
+    ImGuiIO io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;  // Enable Keyboard Controls
-
     GLFWwindow* window;
-    if (!initializeWindow(glsl_version, &window))
+    if (!initializeWindow(&window))
     {
         std::cerr << "Shutdown App." << std::endl;
         //TODO: Try recover and restart.
         return (-1);
     }
     params.setWindow(window);
+    params.setIo(&io);
+    // Load BackgroundTexture
     GLuint backgroundTextureID = loadImage(_THUB_PATH, params.getWindow());
     if (backgroundTextureID == 0) {
         // Handle the error, maybe exit the application
         std::cerr << "Failed to load the background texture." << std::endl;
         glfwDestroyWindow(params.getWindow());
         glfwTerminate();
-        return (-1);
+        return (EXIT_FAILURE);
     }
+    params.setBackgroundTextureID(backgroundTextureID);
+
+    GLuint iconTextureID = loadImage(_ICON_PATH, params.getWindow());
+    if (iconTextureID == 0) {
+        // Handle the error, maybe exit the application
+        std::cerr << "Failed to load the background texture." << std::endl;
+        glfwDestroyWindow(params.getWindow());
+        glfwTerminate();
+        return (EXIT_FAILURE);
+    }
+    params.setIconTextureID(iconTextureID);
 
     // Setup ImGui binding
-    if (!setupImGui(params.getWindow(), glsl_version, &io))
+    if (!setupImGui(params))
     {
         std::cerr << "Failed to setup ImGui." << std::endl;
         glfwDestroyWindow(params.getWindow());
         glfwTerminate();
-        return -1;
+        return (EXIT_FAILURE);
     }
-    if (mainLoop(&io, backgroundTextureID, &params))
+    if (mainLoop(&params))
     {
         std::cerr << "An error occurred during the main loop." << std::endl;
         cleanup(params.getWindow());
