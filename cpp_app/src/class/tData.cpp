@@ -35,7 +35,7 @@ GLuint T_data::loadImage(const char* imagePath)
     unsigned char* data = stbi_load(imagePath, &width, &height, &channels, 4);
     if (data == nullptr) {
         std::cerr << "Failed to load image: " << imagePath << std::endl;
-        return 0;
+        return (0);
     }
     // Create a texture
     GLuint textureID;
@@ -147,5 +147,6 @@ int T_data::initImgui()
     }
     this->setBackgroundTextureID(backgroundTextureID);
     this->loadIcons();
+
     return (EXIT_SUCCESS);
 }

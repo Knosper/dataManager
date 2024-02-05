@@ -18,9 +18,8 @@
 #endif
 
 //########################### Initialization functions ########################
-
-
-bool setupImGui(T_data &params) {
+bool setupImGui(T_data &params)
+{
     const char* glsl_version = "#version 130";
     // Check for valid window pointer
     if (!params.getWindow()) {
@@ -30,14 +29,15 @@ bool setupImGui(T_data &params) {
     // Initialize ImGui
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
-    params.setIo(&(ImGui::GetIO())); (void) params.getIo();
+    params.setIo(&(ImGui::GetIO()));
     ImGui::StyleColorsDark();
-
-    if (!ImGui_ImplGlfw_InitForOpenGL(params.getWindow(), true)) {
+    if (!ImGui_ImplGlfw_InitForOpenGL(params.getWindow(), true))
+    {
         std::cerr << "Failed to initialize ImGui GLFW." << std::endl;
         return false;
     }
-    if (!ImGui_ImplOpenGL3_Init(glsl_version)) {
+    if (!ImGui_ImplOpenGL3_Init(glsl_version))
+    {
         std::cerr << "Failed to initialize ImGui OpenGL." << std::endl;
         return false;
     }
@@ -184,7 +184,7 @@ bool mainLoop(T_data* params)
     return (EXIT_SUCCESS);
 }
 
-// ########################### Main app ###########################
+// ########################### Main app (Init & cleanup) ###########################
 int initGui(T_data& params)
 {
     //init window && io && textures
