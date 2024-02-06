@@ -7,7 +7,7 @@
 #endif
 #include "stb_image.h"
 
-T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _status(false)
+T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io()
 {
     std::cout << "default T_data created" << std::endl;
 }

@@ -53,43 +53,65 @@ void renderMenuBar(T_data& params)
             ImGui::SameLine();
             if (ImGui::MenuItem("List Databases"))
             {
+                params.setCurrentMenuItem(SelectedMenuItem::ListDatabases);
                 std::cout << "List all detected databases" << std::endl;
-                DatabaseCrawler detector;
-                auto detectedDatabases = detector.detectDatabases();
-
-                for (const auto& dbInfo : detectedDatabases) {
-                    // Here, you might want to add the detected databases to some kind of UI list or log the info
-
-                    std::cout << "Detected database: " << dbInfo.type << " - " << dbInfo.dbName << std::endl;
-                }
             }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_NEW_CONNECTION), ImVec2(18, 18)); 
             ImGui::SameLine();
             if (ImGui::MenuItem("New Connection"))
             {
+                params.setCurrentMenuItem(SelectedMenuItem::NewConnection);
                 std::cout << "Open the 'New Connection' Input window" << std::endl;
             }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_MANAGE_CONNECTION), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Manage Connections")) { /* ... */ }
+            if (ImGui::MenuItem("Manage Connections"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::ManageConnections);
+                std::cout << "Open the 'Manage Connections' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_IMPORT), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Import Connection")) { /* ... */ }
+            if (ImGui::MenuItem("Import Connection"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::ImportConnection);
+                std::cout << "Open the 'Import Connection' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_EXPORT), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Export Connection")) { /* ... */ }
+            if (ImGui::MenuItem("Export Connection"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::ExportConnection);
+                std::cout << "Open the 'Export Connection' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_CREATE_DATABASE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Create Database")) { /* ... */ }
+            if (ImGui::MenuItem("Create Database"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::CreateDatabase);
+                std::cout << "Open the 'Create Database' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DELETE_DATABASE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Delete Database")) { /* ... */ }
+            if (ImGui::MenuItem("Delete Database"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::DeleteDatabase);
+                std::cout << "Open the 'Delete Database' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_BACKUP), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Backup Database")) { /* ... */ }
+            if (ImGui::MenuItem("Backup Database"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::BackupDatabase);
+                std::cout << "Open the 'Backup Database' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_RESTORE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Restore Database")) { /* ... */ }
+            if (ImGui::MenuItem("Restore Database"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::RestoreDatabase);
+                std::cout << "Open the 'Restore Database' window" << std::endl;
+            }
             ImGui::EndMenu();
         }
         ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_TOOLS), ImVec2(18, 18)); 
@@ -98,11 +120,18 @@ void renderMenuBar(T_data& params)
         {
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_VISUALIZE_DATABASE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Visualize Database")) { /* ... */ }
+            if (ImGui::MenuItem("Visualize Database"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::VisualizeDatabase);
+                std::cout << "Open the 'Visualize Database' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DATABASE_LOGS), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Database Logs")) { /* ... */ }
-
+            if (ImGui::MenuItem("Database Logs"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::DatabaseLogs);
+                std::cout << "Open the 'Database Logs' window" << std::endl;
+            }
             ImGui::EndMenu();
         }
         ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_SETTINGS), ImVec2(18, 18)); 
@@ -111,10 +140,18 @@ void renderMenuBar(T_data& params)
         {
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_PREFERENCES), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Preferences")) { /* ... */ }
+            if (ImGui::MenuItem("Preferences"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::Preferences);
+                std::cout << "Open the 'Preferences' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_APPERANCE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Appearance")) { /* ... */ }
+            if (ImGui::MenuItem("Appearance"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::Appearance);
+                std::cout << "Open the 'Appearance' window" << std::endl;
+            }
             ImGui::EndMenu();
         }
         ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_HELP), ImVec2(18, 18)); 
@@ -123,15 +160,24 @@ void renderMenuBar(T_data& params)
         {
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_DOCS), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Docs")) { /* ... */ }
+            if (ImGui::MenuItem("Docs"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::Docs);
+                std::cout << "Open the 'Docs' window" << std::endl;
+            }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_UPDATE), ImVec2(18, 18)); 
             ImGui::SameLine();
-            if (ImGui::MenuItem("Check for Updates")) { /* ... */ }
+            if (ImGui::MenuItem("Check for Updates"))
+            {
+                params.setCurrentMenuItem(SelectedMenuItem::CheckForUpdates);
+                std::cout << "Open the 'Check for Updates' window" << std::endl;
+            }
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
     }
 }
+
 
 //complete window background
 void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
@@ -145,6 +191,51 @@ void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID)
     ImGui::End();
     ImGui::PopStyleVar();
 }
+
+void renderSelected(ImVec2 windowSize, T_data* params)
+{
+    switch (params->getCurrentMenuItem())
+    {
+        case SelectedMenuItem::StartPage:
+        {
+            renderBackground(windowSize, params->getBackgroundTextureID());
+            break;
+        }
+        case SelectedMenuItem::ListDatabases:
+            break;
+        case SelectedMenuItem::NewConnection:
+            break;
+        case SelectedMenuItem::ManageConnections:
+            break;
+        case SelectedMenuItem::ImportConnection:
+            break;
+        case SelectedMenuItem::ExportConnection:
+            break;
+        case SelectedMenuItem::CreateDatabase:
+            break;
+        case SelectedMenuItem::DeleteDatabase:
+            break;
+        case SelectedMenuItem::BackupDatabase:
+            break;
+        case SelectedMenuItem::RestoreDatabase:
+            break;
+        case SelectedMenuItem::VisualizeDatabase:
+            break;
+        case SelectedMenuItem::DatabaseLogs:
+            break;
+        case SelectedMenuItem::Preferences:
+            break;
+        case SelectedMenuItem::Appearance:
+            break;
+        case SelectedMenuItem::Docs:
+            break;
+        case SelectedMenuItem::CheckForUpdates:
+            break;
+        default:
+            break;
+    }
+}
+
 
 // ########################### MainLoop ###########################
 bool mainLoop(T_data* params)
@@ -160,7 +251,8 @@ bool mainLoop(T_data* params)
         ImVec2 windowSize = ImGui::GetIO().DisplaySize;
 
         //set params to render
-        renderBackground(windowSize, params->getBackgroundTextureID());
+        //renderBackground(windowSize, params->getBackgroundTextureID());
+        renderSelected(windowSize, params);
         renderMenuBar(*params);
         
         // Rendering
@@ -173,8 +265,7 @@ bool mainLoop(T_data* params)
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
         glfwSwapBuffers(params->getWindow());
     }
-    //TODO: CHeck for errors here
-    return (EXIT_SUCCESS);
+    return EXIT_SUCCESS;
 }
 
 // ########################### Main app (Init & cleanup) ###########################

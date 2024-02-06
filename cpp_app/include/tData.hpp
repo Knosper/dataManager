@@ -27,17 +27,36 @@
 #define _ICON_UPDATE "misc/menu_icons/Icon_Update.png"
 #define _ICON_VISUALIZE_DATABASE "misc/menu_icons/Icon_Visualize_Database.png"
 
+enum class SelectedMenuItem 
+{
+    StartPage,
+    ListDatabases,
+    NewConnection,
+    ManageConnections,
+    ImportConnection,
+    ExportConnection,
+    CreateDatabase,
+    DeleteDatabase,
+    BackupDatabase,
+    RestoreDatabase,
+    VisualizeDatabase,
+    DatabaseLogs,
+    Preferences,
+    Appearance,
+    Docs,
+    CheckForUpdates
+};
+
 class T_data
 {
 private:
-    GLuint      _backgroundTextureID; //Background image
+    GLuint                                  _backgroundTextureID; //Background image
     std::unordered_map<std::string, GLuint> _iconTextureIDs; 
-    GLFWwindow* _window;        //App window
-    ImGuiIO*    _io;            //TODO: add description!
-
+    GLFWwindow*                             _window;        //App window
+    ImGuiIO*                                _io;            //TODO: add description!
+    SelectedMenuItem                        _currentMenuItem;
+    
 public:
-    //status
-    bool        _status;
 
     //Constructor Destructor
     T_data();
@@ -64,5 +83,9 @@ public:
     int initImgui();
     void loadIcons();
     GLuint loadImage(const char* imagePath);
-};
 
+
+    // Getter and setter methods for the currently selected menu item
+    SelectedMenuItem getCurrentMenuItem() const { return _currentMenuItem; }
+    void setCurrentMenuItem(SelectedMenuItem menuItem) { _currentMenuItem = menuItem; }
+};
