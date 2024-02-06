@@ -1,7 +1,7 @@
 # Define compiler
 CXX := clang++
 
-INCLUDES := -Iinclude
+INCLUDES := -Iinclude -I/usr/include/mysql
 # Define the directory for ImGui files, relative to the src directory
 IMGUI_DIR := ../imgui
 
@@ -28,7 +28,8 @@ CXXFLAGS := -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 CXXFLAGS += -g -Wall -Wformat
 
 # Libraries needed for linking (GLFW, GL, etc.)
-LIBS := -lglfw -lGL -ldl -lGLEW
+LIBS := -lmysqlclient -lglfw -lGL -ldl -lGLEW
+
 
 # Define the executable file
 MAIN := dataManager
@@ -75,5 +76,16 @@ $(OBJDIR)/%.o: $(IMGUI_DIR)/backends/%.cpp
 $(MAIN): | directories
 
 clean:
+	@echo Cleaning application objects...
+	find $(OBJDIR) -type f ! -name 'imgui*' -delete
+	$(RM) $(MAIN)
+
+# Rebuild only app
+re: clean all
+
+fclean:
 	@echo Cleaning...
 	$(RM) -r $(OBJDIR)/* $(MAIN)
+
+# Rebuild all
+fre: fclean all
