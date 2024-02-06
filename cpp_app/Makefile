@@ -1,5 +1,5 @@
 # Define compiler
-CXX := clang++
+CXX := g++
 
 INCLUDES := -Iinclude -I/usr/include/mysql
 # Define the directory for ImGui files, relative to the src directory
