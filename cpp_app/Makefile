@@ -28,7 +28,7 @@ CXXFLAGS := -std=c++11 -I$(IMGUI_DIR) -I$(IMGUI_DIR)/backends
 CXXFLAGS += -g -Wall -Wformat
 
 # Libraries needed for linking (GLFW, GL, etc.)
-LIBS := -lmysqlclient -lglfw -lGL -ldl -lGLEW
+LIBS := -lmysqlclient -lglfw -lGL -ldl -lGLEW  -lsqlite3
 
 
 # Define the executable file

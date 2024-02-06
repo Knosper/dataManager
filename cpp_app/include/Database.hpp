@@ -2,16 +2,9 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <mysql/mysql.h>
+#include <sqlite3.h>
 
-/*TODO: create subclasses like:
-    #include <mysql/mysql.h>
-    class MySql 
-        MYSQL* connection;
-
-    #include <sqlite3.h>
-    class SqLlite
-        sqlite3* connection;
-*/
 class t_Database {
 public:
     t_Database(const std::string& host, const std::string& user, const std::string& pwd, const std::string& dbName)
@@ -38,4 +31,42 @@ protected:
     void clearQueryResults() {
         queryResults.clear();
     }
+};
+
+class MySql : public t_Database {
+public:
+    MySql(const std::string& host, const std::string& user, const std::string& pwd, const std::string& dbName);
+        //: t_Database(host, user, pwd, dbName), connection(nullptr) {}
+
+    ~MySql();
+
+    bool connect() override;
+
+    void disconnect() override;
+
+    bool executeQuery(const std::string& query) override;
+
+    std::vector<std::vector<std::string>> getQueryResults();
+
+private:
+    MYSQL* connection;
+};
+
+class SqLite : public t_Database {
+public:
+    SqLite(const std::string& dbName);
+        //: t_Database("", "", "", dbName), connection(nullptr) {}
+
+    ~SqLite();
+
+    bool connect() override;
+
+    void disconnect() override;
+
+    bool executeQuery(const std::string& query);
+
+    std::vector<std::vector<std::string>> getQueryResults() override;
+
+private:
+    sqlite3* connection;
 };

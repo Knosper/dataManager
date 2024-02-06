@@ -54,6 +54,13 @@ void renderMenuBar(T_data& params)
             if (ImGui::MenuItem("List Databases"))
             {
                 std::cout << "List all detected databases" << std::endl;
+                DatabaseCrawler detector;
+                auto detectedDatabases = detector.detectDatabases();
+
+                for (const auto& dbInfo : detectedDatabases) {
+                    // Here, you might want to add the detected databases to some kind of UI list or log the info
+                    std::cout << "Detected database: " << dbInfo.type << " - " << dbInfo.dbName << std::endl;
+                }
             }
             ImGui::Image((void*)(intptr_t)params.getIconTextureID(_ICON_NEW_CONNECTION), ImVec2(18, 18)); 
             ImGui::SameLine();
