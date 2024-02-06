@@ -80,6 +80,11 @@ public:
     ImGuiIO*            getIo();
     SelectedMenuItem    getCurrentMenuItem() const;
 
+
+    void cleanup();
+    bool mainLoop();
+    int initGui();
+
 private:
     GLuint                                  _backgroundTextureID;
     std::unordered_map<std::string, GLuint> _iconTextureIDs; 

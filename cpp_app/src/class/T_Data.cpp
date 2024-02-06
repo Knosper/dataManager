@@ -1,4 +1,4 @@
-#include "tData.hpp"
+#include "T_Data.hpp"
 /* Do this:
       #define STB_IMAGE_IMPLEMENTATION
    before you include this file (stb_image.h) in *one* C or C++ file to create the implementation.*/
@@ -7,7 +7,7 @@
 #endif
 #include "stb_image.h"
 
-T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io()
+T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(SelectedMenuItem::StartPage)
 {
     std::cout << "default T_data created" << std::endl;
 }
@@ -481,4 +481,76 @@ GLuint T_data::getIconTextureID(const std::string& name) const
         return it->second;
     }
     return (0);
+}
+
+
+
+
+// ########################### Cleanup function ###########################
+void T_data::cleanup()
+{
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    if (_window) {
+        glfwDestroyWindow(_window);
+    }
+    glfwTerminate();
+}
+
+// ########################### MainLoop ###########################
+bool T_data::mainLoop()
+{
+    while (!glfwWindowShouldClose(getWindow()))
+    {
+        glfwPollEvents();
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+        ImGui::NewFrame();
+
+        // Fetch the new window size
+        ImVec2 windowSize = ImGui::GetIO().DisplaySize;
+        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+        //set params to render
+        renderSelected(windowSize);
+        renderMenuBar();
+        ImGui::End();
+        ImGui::PopStyleVar();
+        // Rendering
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(getWindow(), &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(0.45f, 0.55f, 0.60f, 1.00f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+        glfwSwapBuffers(getWindow());
+    }
+    return EXIT_SUCCESS;
+}
+
+// ########################### Main app (Init & cleanup) ###########################
+int T_data::initGui()
+{
+    //init window && io && textures
+    if (initImgui())
+        return (EXIT_FAILURE);
+
+    // Setup ImGui binding
+    if (!setupImGui())
+    {
+        std::cerr << "Failed to setup ImGui." << std::endl;
+        glfwDestroyWindow(getWindow());
+        glfwTerminate();
+        return (EXIT_FAILURE);
+    }
+    if (mainLoop())
+    {
+        std::cerr << "An error occurred during the main loop." << std::endl;
+        cleanup();
+        return (EXIT_FAILURE);
+    }
+    // Cleanup
+    cleanup();
+    return (EXIT_SUCCESS);
 }
