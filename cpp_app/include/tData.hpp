@@ -52,8 +52,8 @@ class T_data
 private:
     GLuint                                  _backgroundTextureID; //Background image
     std::unordered_map<std::string, GLuint> _iconTextureIDs; 
-    GLFWwindow*                             _window;        //App window
-    ImGuiIO*                                _io;            //TODO: add description!
+    GLFWwindow*                             _window;        
+    ImGuiIO*                                _io;            
     SelectedMenuItem                        _currentMenuItem;
     
 public:
