@@ -186,3 +186,259 @@ bool T_data::setupImGui()
     }
     return true;
 }
+
+// Call this function where you want to render the search options in the main window
+void T_data::renderSearchOptions(ImVec2 windowSize)
+{
+    ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
+    ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
+
+    // Check the current selected menu item
+    if (this->getCurrentMenuItem() == SelectedMenuItem::ListDatabases)
+    {
+        // Text Input for database name
+        static char dbName[128] = "";
+        ImGui::InputText("Database Name", dbName, IM_ARRAYSIZE(dbName));
+
+        // Numeric input fields for specifying size range
+        static int minSize = 0;
+        ImGui::InputInt("Min Size", &minSize);
+        ImGui::SameLine(); // Place next item on the same line
+        static int maxSize = 100;
+        ImGui::InputInt("Max Size", &maxSize);
+
+        // Dropdown menu for database type selection
+        static const char* dbTypes[] = {"Type 1", "Type 2", "Type 3"};
+        static int currentDbTypeIndex = 0;
+        if (ImGui::BeginCombo("Database Type", dbTypes[currentDbTypeIndex])) {
+            for (int i = 0; i < IM_ARRAYSIZE(dbTypes); i++) {
+                bool isSelected = (currentDbTypeIndex == i);
+                if (ImGui::Selectable(dbTypes[i], isSelected))
+                    currentDbTypeIndex = i;
+                if (isSelected)
+                    ImGui::SetItemDefaultFocus();
+            }
+            ImGui::EndCombo();
+        }
+
+        // Checkboxes for additional options
+        static bool option1 = false;
+        ImGui::Checkbox("Option 1", &option1);
+        ImGui::SameLine(); // Align next item on the same line
+        static bool option2 = false;
+        ImGui::Checkbox("Option 2", &option2);
+
+        // Buttons for actions
+        if (ImGui::Button("Search")) {
+            // Execute search logic using the parameters
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Reset")) {
+            // Reset the search parameters
+            dbName[0] = '\0';
+            minSize = 0;
+            maxSize = 100;
+            currentDbTypeIndex = 0;
+            option1 = false;
+            option2 = false;
+        }
+    }
+}
+
+void T_data::renderMenuBar()
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Database"))
+        {
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_LIST_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("List Databases"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::ListDatabases);
+                std::cout << "List all detected databases" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_NEW_CONNECTION), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("New Connection"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::NewConnection);
+                std::cout << "Open the 'New Connection' Input window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_MANAGE_CONNECTION), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Manage Connections"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::ManageConnections);
+                std::cout << "Open the 'Manage Connections' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_IMPORT), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Import Connection"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::ImportConnection);
+                std::cout << "Open the 'Import Connection' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_EXPORT), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Export Connection"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::ExportConnection);
+                std::cout << "Open the 'Export Connection' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_CREATE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Create Database"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::CreateDatabase);
+                std::cout << "Open the 'Create Database' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DELETE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Delete Database"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::DeleteDatabase);
+                std::cout << "Open the 'Delete Database' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_BACKUP), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Backup Database"))
+            {
+            setCurrentMenuItem(SelectedMenuItem::BackupDatabase);
+                std::cout << "Open the 'Backup Database' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_RESTORE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Restore Database"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::RestoreDatabase);
+                std::cout << "Open the 'Restore Database' window" << std::endl;
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_TOOLS), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Tools"))
+        {
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_VISUALIZE_DATABASE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Visualize Database"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::VisualizeDatabase);
+                std::cout << "Open the 'Visualize Database' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_LOGS), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Database Logs"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::DatabaseLogs);
+                std::cout << "Open the 'Database Logs' window" << std::endl;
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_SETTINGS), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Settings"))
+        {
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_PREFERENCES), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Preferences"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::Preferences);
+                std::cout << "Open the 'Preferences' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_APPERANCE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Appearance"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::Appearance);
+                std::cout << "Open the 'Appearance' window" << std::endl;
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_HELP), ImVec2(18, 18)); 
+        ImGui::SameLine();
+        if (ImGui::BeginMenu("Help"))
+        {
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DOCS), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Docs"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::Docs);
+                std::cout << "Open the 'Docs' window" << std::endl;
+            }
+            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_UPDATE), ImVec2(18, 18)); 
+            ImGui::SameLine();
+            if (ImGui::MenuItem("Check for Updates"))
+            {
+                setCurrentMenuItem(SelectedMenuItem::CheckForUpdates);
+                std::cout << "Open the 'Check for Updates' window" << std::endl;
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+}
+
+//complete window background
+void T_data::renderBackground(ImVec2 windowSize)
+{
+    //render background image
+    ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
+    ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
+    ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
+    ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(this->_backgroundTextureID)), windowSize);
+}
+
+void T_data::renderSelected(ImVec2 windowSize)
+{
+    switch (this->getCurrentMenuItem())
+    {
+        case SelectedMenuItem::StartPage:
+        {
+            this->renderBackground(windowSize);
+            break;
+        }
+        case SelectedMenuItem::ListDatabases:
+        {
+            renderSearchOptions(windowSize);
+            break;
+        }
+        case SelectedMenuItem::NewConnection:
+            break;
+        case SelectedMenuItem::ManageConnections:
+            break;
+        case SelectedMenuItem::ImportConnection:
+            break;
+        case SelectedMenuItem::ExportConnection:
+            break;
+        case SelectedMenuItem::CreateDatabase:
+            break;
+        case SelectedMenuItem::DeleteDatabase:
+            break;
+        case SelectedMenuItem::BackupDatabase:
+            break;
+        case SelectedMenuItem::RestoreDatabase:
+            break;
+        case SelectedMenuItem::VisualizeDatabase:
+            break;
+        case SelectedMenuItem::DatabaseLogs:
+            break;
+        case SelectedMenuItem::Preferences:
+            break;
+        case SelectedMenuItem::Appearance:
+            break;
+        case SelectedMenuItem::Docs:
+            break;
+        case SelectedMenuItem::CheckForUpdates:
+            break;
+        default:
+        {
+            renderBackground(windowSize);
+            break;
+        }
+    }
+}

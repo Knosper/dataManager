@@ -21,6 +21,4 @@
 
 int initGui(T_data& params);
 bool mainLoop(T_data* params);
-void renderBackground(ImVec2 windowSize, GLuint backgroundTextureID);
-void renderMenuBar(T_data& params);
 void cleanup(GLFWwindow* window);
