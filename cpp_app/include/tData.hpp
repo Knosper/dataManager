@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
 #include <unordered_map>
 
 #define _THUB_PATH "misc/Thub.jpg"
@@ -80,7 +82,9 @@ public:
     ImGuiIO* getIo() { return _io; }
 
 
-    int initImgui();
+    int     initImgui();
+    bool    setupImGui();
+
     void loadIcons();
     GLuint loadImage(const char* imagePath);
 

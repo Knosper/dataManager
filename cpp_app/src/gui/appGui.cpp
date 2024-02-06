@@ -1,32 +1,7 @@
 #include "AppGui.hpp"
 
 //########################### Initialization functions ########################
-bool setupImGui(T_data &params)
-{
-    const char* glsl_version = "#version 130";
-    // Check for valid window pointer
-    if (!params.getWindow())
-    {
-        std::cerr << "setupImGui: Provided GLFWwindow pointer is null." << std::endl;
-        return false;
-    }
-    // Initialize ImGui
-    IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
-    params.setIo(&(ImGui::GetIO()));
-    ImGui::StyleColorsDark();
-    if (!ImGui_ImplGlfw_InitForOpenGL(params.getWindow(), true))
-    {
-        std::cerr << "Failed to initialize ImGui GLFW." << std::endl;
-        return false;
-    }
-    if (!ImGui_ImplOpenGL3_Init(glsl_version))
-    {
-        std::cerr << "Failed to initialize ImGui OpenGL." << std::endl;
-        return false;
-    }
-    return true;
-}
+
 
 // ########################### Cleanup function ###########################
 void cleanup(GLFWwindow* window)
@@ -359,7 +334,7 @@ int initGui(T_data& params)
         return (EXIT_FAILURE);
 
     // Setup ImGui binding
-    if (!setupImGui(params))
+    if (!params.setupImGui())
     {
         std::cerr << "Failed to setup ImGui." << std::endl;
         glfwDestroyWindow(params.getWindow());

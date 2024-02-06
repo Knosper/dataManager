@@ -159,3 +159,30 @@ int T_data::initImgui()
 
     return (EXIT_SUCCESS);
 }
+
+bool T_data::setupImGui()
+{
+    const char* glsl_version = "#version 130";
+    // Check for valid window pointer
+    if (!this->getWindow())
+    {
+        std::cerr << "setupImGui: Provided GLFWwindow pointer is null." << std::endl;
+        return false;
+    }
+    // Initialize ImGui
+    IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    this->setIo(&(ImGui::GetIO()));
+    ImGui::StyleColorsDark();
+    if (!ImGui_ImplGlfw_InitForOpenGL(this->getWindow(), true))
+    {
+        std::cerr << "Failed to initialize ImGui GLFW." << std::endl;
+        return false;
+    }
+    if (!ImGui_ImplOpenGL3_Init(glsl_version))
+    {
+        std::cerr << "Failed to initialize ImGui OpenGL." << std::endl;
+        return false;
+    }
+    return true;
+}
