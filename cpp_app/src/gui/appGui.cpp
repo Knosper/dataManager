@@ -59,6 +59,7 @@ void renderMenuBar(T_data& params)
 
                 for (const auto& dbInfo : detectedDatabases) {
                     // Here, you might want to add the detected databases to some kind of UI list or log the info
+
                     std::cout << "Detected database: " << dbInfo.type << " - " << dbInfo.dbName << std::endl;
                 }
             }

@@ -7,7 +7,7 @@ DatabaseCrawler::DatabaseCrawler() {
 
 DatabaseCrawler::~DatabaseCrawler() {
     // Destructor implementation
-    std::cout << "default DatabaseCrawler deleted" << std::endl;
+    std::cout << "default DatabaseCrawler destro" << std::endl;
 }
 
 std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
@@ -28,8 +28,45 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
 std::vector<DatabaseInfo> DatabaseCrawler::detectMySQLDatabases()
 {
     std::vector<DatabaseInfo> mysqlDatabases;
-
-    // Implementation to detect MySQL databases
+    std::string nmapCommand = "nmap -p 5432 --open -sV 0.0.0.0";
+    
+    // Open a pipe to execute the nmap command and read its output
+    FILE* pipe = popen(nmapCommand.c_str(), "r");
+    if (!pipe) {
+        perror("popen");
+        return mysqlDatabases;
+    }
+    
+    char buffer[128];
+    std::string nmapOutput = "";
+    
+    // Read the output of nmap into a string
+    while (!feof(pipe)) {
+        if (fgets(buffer, 128, pipe) != nullptr) {
+            nmapOutput += buffer;
+        }
+    }
+    
+    // Close the pipe
+    pclose(pipe);
+    
+    // Use regular expressions to parse the nmap output
+    std::regex pattern("^(\\d+)/tcp\\s+open\\s+mysql\\s+MySQL\\s+([^\\s]+)");
+    std::smatch match;
+    std::string::const_iterator searchStart(nmapOutput.cbegin());
+    
+    while (std::regex_search(searchStart, nmapOutput.cend(), match, pattern)) {
+        if (match.size() == 3) {
+            DatabaseInfo dbInfo;
+            dbInfo.host = "0.0.0.0";
+            dbInfo.port = match[1].str();
+            dbInfo.service = "MySQL";
+            dbInfo.version = match[2].str();
+            mysqlDatabases.push_back(dbInfo);
+        }
+        searchStart = match.suffix().first;
+    }
+    
     return mysqlDatabases;
 }
 
