@@ -1,16 +1,16 @@
 #include "DatabaseCrawler.hpp"
 
-DatabaseCrawler::DatabaseCrawler() {
-    // Constructor implementation
+DataBaseCrawler::DataBaseCrawler()
+{
     std::cout << "default DatabaseCrawler created" << std::endl;
 }
 
-DatabaseCrawler::~DatabaseCrawler() {
-    // Destructor implementation
+DataBaseCrawler::~DataBaseCrawler()
+{
     std::cout << "default DatabaseCrawler destro" << std::endl;
 }
 
-std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
+std::vector<DatabaseInfo> DataBaseCrawler::detectDatabases()
 {
     std::vector<DatabaseInfo> detectedDatabases;
 
@@ -25,7 +25,7 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
     return detectedDatabases;
 }
 
-std::vector<DatabaseInfo> DatabaseCrawler::detectMySQLDatabases()
+std::vector<DatabaseInfo> DataBaseCrawler::detectMySQLDatabases()
 {
     std::vector<DatabaseInfo> mysqlDatabases;
     std::string nmapCommand = "nmap -p 5432 --open -sV 0.0.0.0";
@@ -70,7 +70,7 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectMySQLDatabases()
     return mysqlDatabases;
 }
 
-std::vector<DatabaseInfo> DatabaseCrawler::detectSqliteDatabases()
+std::vector<DatabaseInfo> DataBaseCrawler::detectSqliteDatabases()
 {
     std::vector<DatabaseInfo> sqliteDatabases;
 

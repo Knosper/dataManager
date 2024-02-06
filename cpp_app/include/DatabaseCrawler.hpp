@@ -1,5 +1,4 @@
 #pragma once
-#include "DatabaseCrawler.hpp"
 #include "Database.hpp"
 #include <vector>
 #include <string>
@@ -18,10 +17,10 @@ struct DatabaseInfo {
 };
 
 //TODO: Write cpp file for this class
-class DatabaseCrawler {
+class DataBaseCrawler {
 public:
-    DatabaseCrawler();
-    ~DatabaseCrawler();
+    DataBaseCrawler();
+    ~DataBaseCrawler();
 
     // Function to detect databases. Returns a list of detected database info.
     std::vector<DatabaseInfo> detectDatabases();

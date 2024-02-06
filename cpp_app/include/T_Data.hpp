@@ -6,6 +6,8 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <unordered_map>
+#include <vector>
+#include <algorithm>
 
 #define _THUB_PATH "misc/Thub.jpg"
 #define _ICON_APPERANCE "misc/menu_icons/Icon_Apperance.png"

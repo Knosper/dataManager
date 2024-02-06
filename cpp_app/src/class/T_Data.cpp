@@ -1,4 +1,6 @@
 #include "T_Data.hpp"
+#include "DatabaseCrawler.hpp"
+#include "utils.hpp"
 /* Do this:
       #define STB_IMAGE_IMPLEMENTATION
    before you include this file (stb_image.h) in *one* C or C++ file to create the implementation.*/
@@ -6,6 +8,8 @@
 #define STB_IMAGE_IMPLEMENTATION
 #endif
 #include "stb_image.h"
+
+
 
 T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(SelectedMenuItem::StartPage)
 {
@@ -226,37 +230,29 @@ void T_data::renderSelected(ImVec2 windowSize)
 // Call this function where you want to render the search options in the main window
 void T_data::renderSearchOptions(ImVec2 windowSize)
 {
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 10)); // Increase padding
+    ImGui::PushStyleColor(ImGuiCol_WindowBg, ImVec4(0.1f, 0.1f, 0.1f, 1.0f)); // Dark background color
+
     ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
     ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
 
-    // Check the current selected menu item
+    ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f)); // Bright text for contrast
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.2f, 0.2f, 1.0f)); // Style for buttons
+    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.3f, 0.3f, 1.0f)); // Style for button hover
+    ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.1f, 0.1f, 1.0f)); // Style for button active
+
+
     if (this->getCurrentMenuItem() == SelectedMenuItem::ListDatabases)
     {
         // Text Input for database name
         static char dbName[128] = "";
-        ImGui::InputText("Database Name", dbName, IM_ARRAYSIZE(dbName));
-
-        // Numeric input fields for specifying size range
-        static int minSize = 0;
-        ImGui::InputInt("Min Size", &minSize);
-        ImGui::SameLine(); // Place next item on the same line
-        static int maxSize = 100;
-        ImGui::InputInt("Max Size", &maxSize);
+        ImGui::InputText("Database Name", dbName, IM_ARRAYSIZE(dbName), ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabaseName);
 
         // Dropdown menu for database type selection
         static const char* dbTypes[] = {"Type 1", "Type 2", "Type 3"};
         static int currentDbTypeIndex = 0;
-        if (ImGui::BeginCombo("Database Type", dbTypes[currentDbTypeIndex])) {
-            for (int i = 0; i < IM_ARRAYSIZE(dbTypes); i++) {
-                bool isSelected = (currentDbTypeIndex == i);
-                if (ImGui::Selectable(dbTypes[i], isSelected))
-                    currentDbTypeIndex = i;
-                if (isSelected)
-                    ImGui::SetItemDefaultFocus();
-            }
-            ImGui::EndCombo();
-        }
+        ImGui::Combo("Database Type", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
 
         // Checkboxes for additional options
         static bool option1 = false;
@@ -266,30 +262,66 @@ void T_data::renderSearchOptions(ImVec2 windowSize)
         ImGui::Checkbox("Option 2", &option2);
 
         // Buttons for actions
-        if (ImGui::Button("Search")) {
-            // Execute search logic using the parameters
+        if (ImGui::Button("Search", ImVec2(120, 0)))
+        {
+           //DataBaseCrawler dbCrawler(dbName, dbTypes[currentDbTypeIndex], option1, option2);
         }
         ImGui::SameLine();
-        if (ImGui::Button("Reset")) {
+        if (ImGui::Button("Reset", ImVec2(120, 0))) {
             // Reset the search parameters
             dbName[0] = '\0';
-            minSize = 0;
-            maxSize = 100;
             currentDbTypeIndex = 0;
             option1 = false;
             option2 = false;
         }
     }
+
+    // Begin a child region with a scrollbar
+    ImGui::BeginChild("##ScrollingRegion", ImVec2(0, -ImGui::GetFrameHeightWithSpacing()), false, ImGuiWindowFlags_HorizontalScrollbar);
+
+    /*if (ImGui::BeginTable("##DatabaseTable", 6, ImGuiTableFlags_Resizable | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_ScrollY | ImGuiTableFlags_Sortable))
+    {
+       
+        
+        // Table population
+        for (const auto& db_entry : databases)
+        {
+            ImGui::TableNextRow();
+            ImGui::TableSetColumnIndex(0);
+            ImGui::Text("%d", db_entry.id);
+            ImGui::TableSetColumnIndex(1);
+            ImGui::Text("%s", db_entry.name.c_str());
+            ImGui::TableSetColumnIndex(2);
+            ImGui::Text("%d", db_entry.port);
+            ImGui::TableSetColumnIndex(3);
+            ImGui::Text("%d", db_entry.size);
+            ImGui::TableSetColumnIndex(4);
+            ImGui::Text("%s", db_entry.type.c_str());
+            ImGui::TableSetColumnIndex(5);
+            ImGui::Text("%s", db_entry.lastUpdated.c_str());
+
+        }
+
+        // End the table
+        ImGui::EndTable();
+    }*/
+
+    // End the child region
+    ImGui::EndChild();
+    ImGui::PopStyleColor(5); // Pop style colors for text, buttons
+    ImGui::PopStyleVar();
 }
 
 //complete window background
 void T_data::renderBackground(ImVec2 windowSize)
 {
     //render background image
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
     ImGui::Begin("##Background", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoInputs);
     ImGui::SetWindowPos(ImVec2(0, 0), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
     ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(this->_backgroundTextureID)), windowSize);
+    ImGui::PopStyleVar(); 
 }
 
 void T_data::renderMenuBar()
@@ -510,12 +542,10 @@ bool T_data::mainLoop()
 
         // Fetch the new window size
         ImVec2 windowSize = ImGui::GetIO().DisplaySize;
-        ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
         //set params to render
         renderSelected(windowSize);
         renderMenuBar();
         ImGui::End();
-        ImGui::PopStyleVar();
         // Rendering
         ImGui::Render();
         int display_w, display_h;
