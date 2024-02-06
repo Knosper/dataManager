@@ -69,16 +69,16 @@ public:
     void                renderMenuBar();
 
     // Setter methods
-    void                setBackgroundTextureID(const GLuint backgroundTextureID) { _backgroundTextureID = backgroundTextureID; }
-    void                setWindow(GLFWwindow* window) { _window = window; }
-    void                setIo(ImGuiIO* io) { _io = io; }
-    void                setCurrentMenuItem(SelectedMenuItem menuItem) { _currentMenuItem = menuItem; }
+    void                setBackgroundTextureID(const GLuint backgroundTextureID);
+    void                setWindow(GLFWwindow* window);
+    void                setIo(ImGuiIO* io);
+    void                setCurrentMenuItem(SelectedMenuItem menuItem);
 
     // Getter methods
-    GLuint              getBackgroundTextureID() const { return _backgroundTextureID; }
-    GLFWwindow*         getWindow() { return _window; }
-    ImGuiIO*            getIo() { return _io; }
-    SelectedMenuItem    getCurrentMenuItem() const { return _currentMenuItem; }
+    GLuint              getBackgroundTextureID() const;
+    GLFWwindow*         getWindow();
+    ImGuiIO*            getIo();
+    SelectedMenuItem    getCurrentMenuItem() const;
 
 private:
     GLuint                                  _backgroundTextureID;
