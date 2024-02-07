@@ -68,14 +68,14 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectPostgreSQLDatabases() {
             while (std::regex_search(searchStart, nmapOutput.cend(), serviceMatch, servicePattern)) {
                 if (serviceMatch.size() > 3) {
                     DatabaseInfo dbInfo;
-                    dbInfo.scanStartTime = startTime;
-                    dbInfo.state = serviceMatch[2].str();
-                    dbInfo.type = "nmap";
-                    dbInfo.host = currentIp;
-                    dbInfo.port = serviceMatch[1].str();
-                    dbInfo.service = "PostgreSQL";
-                    dbInfo.version = serviceMatch[3].str();
-                    dbInfo.nmapOutput = nmapOutput;
+                    dbInfo._scanStartTime = startTime;
+                    dbInfo._state = serviceMatch[2].str();
+                    dbInfo._type = "nmap";
+                    dbInfo._host = currentIp;
+                    dbInfo._port = serviceMatch[1].str();
+                    dbInfo._service = "PostgreSQL";
+                    dbInfo._version = serviceMatch[3].str();
+                    dbInfo._nmapOutput = nmapOutput;
                     postgresDatabases.push_back(dbInfo);
                 }
                 searchStart = serviceMatch.suffix().first;
@@ -131,11 +131,11 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectMySQLDatabases()
     while (std::regex_search(searchStart, nmapOutput.cend(), match, pattern)) {
         if (match.size() == 3) {
             DatabaseInfo dbInfo;
-            dbInfo.scanStartTime = startTime;
-            dbInfo.host = "0.0.0.0";
-            dbInfo.port = match[1].str();
-            dbInfo.service = "MySQL";
-            dbInfo.version = match[2].str();
+            dbInfo._scanStartTime = startTime;
+            dbInfo._host = "0.0.0.0";
+            dbInfo._port = match[1].str();
+            dbInfo._service = "MySQL";
+            dbInfo._version = match[2].str();
             mysqlDatabases.push_back(dbInfo);
         }
         searchStart = match.suffix().first;
@@ -185,30 +185,15 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectSqliteDatabases()
     while (std::regex_search(searchStart, nmapOutput.cend(), match, pattern)) {
         if (match.size() == 3) {
             DatabaseInfo dbInfo;
-            dbInfo.scanStartTime = startTime;
-            dbInfo.host = "0.0.0.0";
-            dbInfo.port = match[1].str();
-            dbInfo.service = "sqlite";
-            dbInfo.version = match[2].str();
+            dbInfo._scanStartTime = startTime;
+            dbInfo._host = "0.0.0.0";
+            dbInfo._port = match[1].str();
+            dbInfo._service = "sqlite";
+            dbInfo._version = match[2].str();
             sqliteDatabases.push_back(dbInfo);
         }
         searchStart = match.suffix().first;
     }
     
     return sqliteDatabases;
-}
-
-std::ostream& operator<<(std::ostream& os, const DataBaseCrawler& crawler)
-{
-    if (crawler.detectedDatabases.empty())
-    {
-        os << "No databases detected." << std::endl;
-        return os;
-    }
-    os << "Detected Databases:" << std::endl;
-    for (const auto& database : crawler.detectedDatabases)
-    {
-        os << "Host: " << database.host << ", Type: " << database.type << std::endl;
-    }
-    return os;
 }

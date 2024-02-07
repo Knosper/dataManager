@@ -13,7 +13,7 @@ void T_data::renderSelected(ImVec2 windowSize)
         }
         case SelectedMenuItem::ListDatabases:
         {
-            renderSearchOptions(windowSize);
+            renderListDataBases(windowSize);
             break;
         }
         case SelectedMenuItem::NewConnection:
@@ -290,26 +290,26 @@ void RenderResetAndSearchButtons(std::string currentDbType, char* startPort, cha
         DataBaseCrawler dbCrawler(startPort, endPort, startIp, endIp, currentDbType);
         std::vector<DatabaseInfo> databaseInfos = dbCrawler.detectDatabases();
 
-        for (const auto& info : databaseInfos) {
+        for (const auto& _info : databaseInfos) {
             std::cout << "------------------------" << std::endl;
-            std::cout << "StartTime: " << info.scanStartTime << std::endl;
-            std::cout << "State: " << info.state << std::endl;
-            std::cout << "databasetype: " << info.type << std::endl;
-            std::cout << "databasehost: " << info.host << std::endl;
-            std::cout << "databaseport: " << info.port << std::endl;
-            std::cout << "databaseservice: " << info.service << std::endl;
-            std::cout << "databaseversion: " << info.version << std::endl;
+            std::cout << "StartTime: " << _info._scanStartTime << std::endl;
+            std::cout << "State: " << _info._state << std::endl;
+            std::cout << "databasetype: " << _info._type << std::endl;
+            std::cout << "databasehost: " << _info._host << std::endl;
+            std::cout << "databaseport: " << _info._port << std::endl;
+            std::cout << "databaseservice: " << _info._service << std::endl;
+            std::cout << "databaseversion: " << _info._version << std::endl;
             std::cout << "------------------------" << std::endl;
         }
     }
 }
 
 // Main function for the first page "List Databases"
-void T_data::renderSearchOptions(ImVec2 windowSize)
+void T_data::renderListDataBases(ImVec2 windowSize)
 {
     SetupStyles();
     ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-    
+
     // Add more space between style setup and GUI elements
     ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);

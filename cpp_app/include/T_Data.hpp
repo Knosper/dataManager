@@ -66,7 +66,7 @@ public:
 
     // UI Render Methods
     void                renderSelected(ImVec2 windowSize);
-    void                renderSearchOptions(ImVec2 windowSize);
+    void                renderListDataBases(ImVec2 windowSize);
     void                renderBackground(ImVec2 windowSize);
     void                renderMenuBar();
 void renderDatabaseSearch();
