@@ -309,8 +309,8 @@ void T_data::renderSearchOptions(ImVec2 windowSize)
 {
     SetupStyles();
     ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    
     // Add more space between style setup and GUI elements
-
     ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
     if (this->getCurrentMenuItem() == SelectedMenuItem::ListDatabases)
