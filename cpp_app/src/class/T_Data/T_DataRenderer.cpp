@@ -56,67 +56,67 @@ void T_data::renderMenuBar()
 {
     if (ImGui::BeginMainMenuBar())
     {
-        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE), ImVec2(18, 18)); 
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DATABASE))), ImVec2(18, 18));
         ImGui::SameLine();
         if (ImGui::BeginMenu("Database"))
         {
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_LIST_DATABASE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_LIST_DATABASE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("List Databases"))
             {
                 setCurrentMenuItem(SelectedMenuItem::ListDatabases);
                 std::cout << "List all detected databases" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_NEW_CONNECTION), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_NEW_CONNECTION))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("New Connection"))
             {
                 setCurrentMenuItem(SelectedMenuItem::NewConnection);
                 std::cout << "Open the 'New Connection' Input window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_MANAGE_CONNECTION), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_MANAGE_CONNECTION))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Manage Connections"))
             {
                 setCurrentMenuItem(SelectedMenuItem::ManageConnections);
                 std::cout << "Open the 'Manage Connections' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_IMPORT), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DATABASE_IMPORT))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Import Connection"))
             {
                 setCurrentMenuItem(SelectedMenuItem::ImportConnection);
                 std::cout << "Open the 'Import Connection' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_EXPORT), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DATABASE_EXPORT))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Export Connection"))
             {
                 setCurrentMenuItem(SelectedMenuItem::ExportConnection);
                 std::cout << "Open the 'Export Connection' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_CREATE_DATABASE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_CREATE_DATABASE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Create Database"))
             {
                 setCurrentMenuItem(SelectedMenuItem::CreateDatabase);
                 std::cout << "Open the 'Create Database' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DELETE_DATABASE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DELETE_DATABASE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Delete Database"))
             {
                 setCurrentMenuItem(SelectedMenuItem::DeleteDatabase);
                 std::cout << "Open the 'Delete Database' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_BACKUP), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DATABASE_BACKUP))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Backup Database"))
             {
-            setCurrentMenuItem(SelectedMenuItem::BackupDatabase);
+                setCurrentMenuItem(SelectedMenuItem::BackupDatabase);
                 std::cout << "Open the 'Backup Database' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_RESTORE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_RESTORE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Restore Database"))
             {
@@ -125,18 +125,18 @@ void T_data::renderMenuBar()
             }
             ImGui::EndMenu();
         }
-        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_TOOLS), ImVec2(18, 18)); 
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_TOOLS))), ImVec2(18, 18));
         ImGui::SameLine();
         if (ImGui::BeginMenu("Tools"))
         {
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_VISUALIZE_DATABASE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_VISUALIZE_DATABASE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Visualize Database"))
             {
                 setCurrentMenuItem(SelectedMenuItem::VisualizeDatabase);
                 std::cout << "Open the 'Visualize Database' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DATABASE_LOGS), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DATABASE_LOGS))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Database Logs"))
             {
@@ -145,18 +145,18 @@ void T_data::renderMenuBar()
             }
             ImGui::EndMenu();
         }
-        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_SETTINGS), ImVec2(18, 18)); 
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_SETTINGS))), ImVec2(18, 18));
         ImGui::SameLine();
         if (ImGui::BeginMenu("Settings"))
         {
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_PREFERENCES), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_PREFERENCES))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Preferences"))
             {
                 setCurrentMenuItem(SelectedMenuItem::Preferences);
                 std::cout << "Open the 'Preferences' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_APPERANCE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_APPERANCE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Appearance"))
             {
@@ -165,18 +165,18 @@ void T_data::renderMenuBar()
             }
             ImGui::EndMenu();
         }
-        ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_HELP), ImVec2(18, 18)); 
+        ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_HELP))), ImVec2(18, 18));
         ImGui::SameLine();
         if (ImGui::BeginMenu("Help"))
         {
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_DOCS), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_DOCS))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Docs"))
             {
                 setCurrentMenuItem(SelectedMenuItem::Docs);
                 std::cout << "Open the 'Docs' window" << std::endl;
             }
-            ImGui::Image((void*)(intptr_t)getIconTextureID(_ICON_UPDATE), ImVec2(18, 18)); 
+            ImGui::Image(reinterpret_cast<void*>(static_cast<intptr_t>(getIconTextureID(_ICON_UPDATE))), ImVec2(18, 18));
             ImGui::SameLine();
             if (ImGui::MenuItem("Check for Updates"))
             {
