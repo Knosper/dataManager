@@ -506,12 +506,14 @@ void SetupStyles()
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(10, 10));
     ImGui::PushStyleVar(ImGuiStyleVar_FrameBorderSize, 1.0f);
     ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4.0f);
-
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 10)); // Increase spacing between elements
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 10)); // Increase inner spacing for better readability
+    
     // Color adjustments for a cohesive look
     const ImVec4 darkBg(0.1f, 0.1f, 0.1f, 1.0f);
     const ImVec4 lightText(1.0f, 1.0f, 1.0f, 1.0f);
-    const ImVec4 accentColor(0.26f, 0.59f, 0.98f, 1.0f); // Example accent color
-    const ImVec4 hoverColor = ImVec4(accentColor.x * 1.1f, accentColor.y * 1.1f, accentColor.z * 1.1f, 1.0f);
+    const ImVec4 accentColor(0.26f, 0.59f, 0.98f, 1.5f);
+    const ImVec4 hoverColor = ImVec4(accentColor.x * 1.1f, accentColor.y * 1.1f, accentColor.z * 1.5f, 1.0f);
     const ImVec4 activeColor = ImVec4(accentColor.x * 0.9f, accentColor.y * 0.9f, accentColor.z * 0.9f, 1.0f);
 
     // Applying base colors
@@ -520,27 +522,36 @@ void SetupStyles()
     ImGui::PushStyleColor(ImGuiCol_Button, accentColor);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, hoverColor);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, activeColor);
-    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.25f, 0.25f, 1.0f)); // Custom frame background
-    // Additional style colors as needed...
-
-    // Important: Ensure you have a matching number of Pop calls
-    // In this case, you should call ImGui::PopStyleVar(3) and ImGui::PopStyleColor(N) where N is the number of PushStyleColor calls
+    ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.25f, 0.25f, 1.0f));
 }
-
-
 
 void RenderDatabaseTypeSelection(int& currentDbTypeIndex)
 {
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
     static const char* dbTypes[] = {"PostgreSQL", "MySQL", "Sqlite"};
-    ImGui::Combo("Database Type", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
+    ImGui::Text("Set Database Type, search will be based on this type of database");
+    ImGui::Combo("##DatabaseType", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
 }
 
 void RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[16])
 {
-    if (!useLocalhost) {
-        ImGui::InputText("Start IP", startIp, IM_ARRAYSIZE(startIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
-        ImGui::InputText("End IP", endIp, IM_ARRAYSIZE(endIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
-    } else {
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Checkbox("Scan localhost instead of IP range", &useLocalhost);
+    if (!useLocalhost)
+    {
+        ImGui::Text("Start IP:");
+        ImGui::SameLine();
+        ImGui::InputText("##StartIP", startIp, IM_ARRAYSIZE(startIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
+        
+        ImGui::Text("  End IP:");
+        ImGui::SameLine();
+        ImGui::InputText("##EndIP", endIp, IM_ARRAYSIZE(endIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
+    } else
+    {
         strcpy(startIp, "127.0.0.1");
         strcpy(endIp, "127.0.0.1");
     }
@@ -548,19 +559,26 @@ void RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[1
 
 void RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6])
 {
-    ImGui::InputText("Start Port", startPort, IM_ARRAYSIZE(startPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
-    ImGui::InputText("End Port", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
+    ImGui::Spacing();
+    ImGui::Separator();
+    ImGui::Spacing();
+    ImGui::Text("Port range to scan for databases");
+    ImGui::Text("Start port:");
+    ImGui::SameLine();
+    ImGui::InputText("##StartPort", startPort, IM_ARRAYSIZE(startPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
+    ImGui::Text("  End port:");
+    ImGui::SameLine();
+    ImGui::InputText("##EndPort", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
 }
 
 void RenderResetAndSearchButtons(int& currentDbTypeIndex, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost)
 {
     static const char* dbTypes[] = {"PostgreSQL", "MySQL", "Sqlite"};
-    ImGui::Combo("Database Type", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
+    ImGui::Combo("##DatabaseTypeCombo", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
     // Buttons for actions
-    if (ImGui::Button("Reset", ImVec2(120, 0)))
+    if (ImGui::Button("Reset##ResetButton", ImVec2(120, 0)))
     {
         // Reset the search parameters
-        //dbName[0] = '\0';
         currentDbTypeIndex = 0;
         startPort[0] = '\0';
         endPort[0] = '\0';
@@ -570,7 +588,7 @@ void RenderResetAndSearchButtons(int& currentDbTypeIndex, char* startPort, char*
     }
     ImGui::SameLine();
     bool validInputs = (useLocalhost && strlen(startPort) > 0 && strlen(endPort) > 0) || (isValidIpAddress(startIp) && isValidIpAddress(endIp) && strlen(startPort) > 0 && strlen(endPort) > 0);
-    if (validInputs && ImGui::Button("Search", ImVec2(120, 0)))
+    if (validInputs && ImGui::Button("Search##SearchButton", ImVec2(120, 0)))
     {
         DataBaseCrawler dbCrawler(startPort, endPort, startIp, endIp, dbTypes[currentDbTypeIndex]);
         std::vector<DatabaseInfo> databaseInfos = dbCrawler.detectDatabases();
@@ -594,6 +612,8 @@ void T_data::renderSearchOptions(ImVec2 windowSize)
 {
     SetupStyles();
     ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+    // Add more space between style setup and GUI elements
+
     ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
     if (this->getCurrentMenuItem() == SelectedMenuItem::ListDatabases)
@@ -604,10 +624,14 @@ void T_data::renderSearchOptions(ImVec2 windowSize)
         static char endIp[16] = "";
         static char startPort[6] = "";
         static char endPort[6] = "";
-        ImGui::Text("Database Search Options:");
+
+        ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "Database Search Options:"); // Use TextColored to highlight the topic with blue color
+
+
+
         // Dropdown menu for database type selection
         RenderDatabaseTypeSelection(currentDbTypeIndex);
-        ImGui::Checkbox("Scan localhost instead of IP range", &useLocalhost);
+
         RenderIPRangeInput(useLocalhost, startIp, endIp);
         RenderPortRangeInput(startPort, endPort);
         bool validInputs = (useLocalhost && strlen(startPort) > 0 && strlen(endPort) > 0) || (isValidIpAddress(startIp) && isValidIpAddress(endIp) && strlen(startPort) > 0 && strlen(endPort) > 0);
@@ -616,5 +640,6 @@ void T_data::renderSearchOptions(ImVec2 windowSize)
     }
     //TODO: Add Table to show the results of the search
     ImGui::PopStyleColor(6); // Pop style colors for text, buttons
-    ImGui::PopStyleVar(3); // Pop style var
+    ImGui::PopStyleVar(5); // Pop style var
+    
 }
