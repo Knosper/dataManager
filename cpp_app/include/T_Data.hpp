@@ -69,6 +69,7 @@ public:
     void                renderSearchOptions(ImVec2 windowSize);
     void                renderBackground(ImVec2 windowSize);
     void                renderMenuBar();
+void renderDatabaseSearch();
 
     // Setter methods
     void                setBackgroundTextureID(const GLuint backgroundTextureID);
