@@ -50,7 +50,7 @@ unsigned long ipToLong(const std::string& ip)
     return val;
 }
 
-std::string longToIp(unsigned long val)
+std::string longToIp(const unsigned long& val)
 {
     std::stringstream ss;
     ss << ((val >> 24) & 0xFF) << '.';

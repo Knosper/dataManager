@@ -10,26 +10,26 @@
 
 void T_data::loadIcons()
 {
-    this->addIconTextureID(_ICON_APPERANCE, loadImage(_ICON_APPERANCE));
-    this->addIconTextureID(_ICON_DATABASE_BACKUP, loadImage(_ICON_DATABASE_BACKUP));
-    this->addIconTextureID(_ICON_BUG, loadImage(_ICON_BUG));
-    this->addIconTextureID(_ICON_CREATE_DATABASE, loadImage(_ICON_CREATE_DATABASE));
-    this->addIconTextureID(_ICON_DATABASE_LOGS, loadImage(_ICON_DATABASE_LOGS));
-    this->addIconTextureID(_ICON_DATABASE, loadImage(_ICON_DATABASE));
-    this->addIconTextureID(_ICON_DELETE_DATABASE, loadImage(_ICON_DELETE_DATABASE));
-    this->addIconTextureID(_ICON_DOCS, loadImage(_ICON_DOCS));
-    this->addIconTextureID(_ICON_DATABASE_EXPORT, loadImage(_ICON_DATABASE_EXPORT));
-    this->addIconTextureID(_ICON_HELP, loadImage(_ICON_HELP));
-    this->addIconTextureID(_ICON_DATABASE_IMPORT, loadImage(_ICON_DATABASE_IMPORT));
-    this->addIconTextureID(_ICON_LIST_DATABASE, loadImage(_ICON_LIST_DATABASE));
-    this->addIconTextureID(_ICON_MANAGE_CONNECTION, loadImage(_ICON_MANAGE_CONNECTION));
-    this->addIconTextureID(_ICON_NEW_CONNECTION, loadImage(_ICON_NEW_CONNECTION));
-    this->addIconTextureID(_ICON_PREFERENCES, loadImage(_ICON_PREFERENCES));
-    this->addIconTextureID(_ICON_RESTORE, loadImage(_ICON_RESTORE));
-    this->addIconTextureID(_ICON_SETTINGS, loadImage(_ICON_SETTINGS));
-    this->addIconTextureID(_ICON_TOOLS, loadImage(_ICON_TOOLS));
-    this->addIconTextureID(_ICON_UPDATE, loadImage(_ICON_UPDATE));
-    this->addIconTextureID(_ICON_VISUALIZE_DATABASE, loadImage(_ICON_VISUALIZE_DATABASE));
+    this->addIconTextureID(AppConfig::_ICON_APPERANCE, loadImage(AppConfig::_ICON_APPERANCE));
+    this->addIconTextureID(AppConfig::_ICON_DATABASE_BACKUP, loadImage(AppConfig::_ICON_DATABASE_BACKUP));
+    this->addIconTextureID(AppConfig::_ICON_BUG, loadImage(AppConfig::_ICON_BUG));
+    this->addIconTextureID(AppConfig::_ICON_CREATE_DATABASE, loadImage(AppConfig::_ICON_CREATE_DATABASE));
+    this->addIconTextureID(AppConfig::_ICON_DATABASE_LOGS, loadImage(AppConfig::_ICON_DATABASE_LOGS));
+    this->addIconTextureID(AppConfig::_ICON_DATABASE, loadImage(AppConfig::_ICON_DATABASE));
+    this->addIconTextureID(AppConfig::_ICON_DELETE_DATABASE, loadImage(AppConfig::_ICON_DELETE_DATABASE));
+    this->addIconTextureID(AppConfig::_ICON_DOCS, loadImage(AppConfig::_ICON_DOCS));
+    this->addIconTextureID(AppConfig::_ICON_DATABASE_EXPORT, loadImage(AppConfig::_ICON_DATABASE_EXPORT));
+    this->addIconTextureID(AppConfig::_ICON_HELP, loadImage(AppConfig::_ICON_HELP));
+    this->addIconTextureID(AppConfig::_ICON_DATABASE_IMPORT, loadImage(AppConfig::_ICON_DATABASE_IMPORT));
+    this->addIconTextureID(AppConfig::_ICON_LIST_DATABASE, loadImage(AppConfig::_ICON_LIST_DATABASE));
+    this->addIconTextureID(AppConfig::_ICON_MANAGE_CONNECTION, loadImage(AppConfig::_ICON_MANAGE_CONNECTION));
+    this->addIconTextureID(AppConfig::_ICON_NEW_CONNECTION, loadImage(AppConfig::_ICON_NEW_CONNECTION));
+    this->addIconTextureID(AppConfig::_ICON_PREFERENCES, loadImage(AppConfig::_ICON_PREFERENCES));
+    this->addIconTextureID(AppConfig::_ICON_RESTORE, loadImage(AppConfig::_ICON_RESTORE));
+    this->addIconTextureID(AppConfig::_ICON_SETTINGS, loadImage(AppConfig::_ICON_SETTINGS));
+    this->addIconTextureID(AppConfig::_ICON_TOOLS, loadImage(AppConfig::_ICON_TOOLS));
+    this->addIconTextureID(AppConfig::_ICON_UPDATE, loadImage(AppConfig::_ICON_UPDATE));
+    this->addIconTextureID(AppConfig::_ICON_VISUALIZE_DATABASE, loadImage(AppConfig::_ICON_VISUALIZE_DATABASE));
 }
 
 GLuint T_data::loadImage(const char* imagePath)

@@ -5,7 +5,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
-#include "constants.h"
+#include "constants.hpp"
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
@@ -38,9 +38,9 @@ public:
 
     // Getter methods
     GLuint                          getBackgroundTextureID() const;
-    GLFWwindow*                     getWindow();
-    ImGuiIO*                        getIo();
-    AppConfig::SelectedMenuItem    getCurrentMenuItem() const;
+    GLFWwindow*                     getWindow() const;
+    ImGuiIO*                        getIo() const;
+    AppConfig::SelectedMenuItem     getCurrentMenuItem() const;
 
 
     void cleanup();
@@ -54,6 +54,6 @@ private:
     ImGuiIO*                                _io;            
     AppConfig::SelectedMenuItem             _currentMenuItem;
     
-    void                addIconTextureID(const std::string& name, GLuint textureID);
+    void                addIconTextureID(const std::string& name, const GLuint& textureID);
     GLuint              getIconTextureID(const std::string& name) const;
 };

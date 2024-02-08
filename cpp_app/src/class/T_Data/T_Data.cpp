@@ -44,12 +44,12 @@ GLuint T_data::getBackgroundTextureID() const
     return _backgroundTextureID;
 }
 
-GLFWwindow* T_data::getWindow() 
+GLFWwindow* T_data::getWindow() const
 {
     return _window;
 }
 
-ImGuiIO* T_data::getIo() 
+ImGuiIO* T_data::getIo() const
 {
     return _io;
 }
@@ -59,7 +59,7 @@ AppConfig::SelectedMenuItem T_data::getCurrentMenuItem() const
     return _currentMenuItem;
 }
 
-void T_data::addIconTextureID(const std::string& name, GLuint textureID)
+void T_data::addIconTextureID(const std::string& name, const GLuint& textureID)
 {
     this->_iconTextureIDs[name] = textureID;
 }
@@ -120,7 +120,7 @@ int T_data::initImgui()
     this->setWindow(window);
     this->setIo(&io);
         // Load BackgroundTexture
-    GLuint backgroundTextureID = this->loadImage(_THUB_PATH);
+    GLuint backgroundTextureID = this->loadImage(AppConfig::_THUB_PATH);
     if (backgroundTextureID == 0)
     {
         // Handle the error, maybe exit the application

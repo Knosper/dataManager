@@ -28,12 +28,12 @@ struct DatabaseInfo
     std::string _endIp; // End IP for the scan
 };
 
-class DataBaseCrawler {
+class DatabaseCrawler {
 protected:
-    DataBaseCrawler();
+    DatabaseCrawler();
 public:
-    DataBaseCrawler(std::string startPort, std::string endPort, std::string startIp, std::string endIp, std::string type);
-    ~DataBaseCrawler();
+    DatabaseCrawler(const std::string& startPort, const std::string& endPort, const std::string& startIp, const std::string& endIp, std::string& type);
+    ~DatabaseCrawler();
 
     // Function to detect databases. Returns a list of detected database info.
     std::vector<DatabaseInfo> detectDatabases();

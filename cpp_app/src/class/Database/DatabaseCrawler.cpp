@@ -1,21 +1,21 @@
 #include "DatabaseCrawler.hpp"
 
-DataBaseCrawler::DataBaseCrawler()
+DatabaseCrawler::DatabaseCrawler()
 {
     std::cout << "default DatabaseCrawler created" << std::endl;
 }
 
-DataBaseCrawler::DataBaseCrawler(std::string startPort, std::string endPort, std::string startIp, std::string endIp, std::string type): _startPort(startPort), _endPort(endPort), _startIp(startIp), _endIp(endIp), _type(type)
+DatabaseCrawler::DatabaseCrawler(const std::string& startPort, const std::string& endPort, const std::string& startIp, const std::string& endIp, std::string& type): _startPort(startPort), _endPort(endPort), _startIp(startIp), _endIp(endIp), _type(type)
 {
     std::cout << "default DatabaseCrawler created" << std::endl;
 }
 
-DataBaseCrawler::~DataBaseCrawler()
+DatabaseCrawler::~DatabaseCrawler()
 {
     std::cout << "default DatabaseCrawler destro" << std::endl;
 }
 
-std::vector<DatabaseInfo> DataBaseCrawler::detectDatabases()
+std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
 {
     std::vector<DatabaseInfo> detectedDatabases;
 
@@ -30,7 +30,7 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectDatabases()
     return detectedDatabases;
 }
 
-std::vector<DatabaseInfo> DataBaseCrawler::detectPostgreSQLDatabases() {
+std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases() {
     std::vector<DatabaseInfo> postgresDatabases;
     std::time_t currentTime = std::time(nullptr);
     std::string startTime = std::asctime(std::localtime(&currentTime));
@@ -90,7 +90,7 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectPostgreSQLDatabases() {
 }
 
 
-std::vector<DatabaseInfo> DataBaseCrawler::detectMySQLDatabases()
+std::vector<DatabaseInfo> DatabaseCrawler::detectMySQLDatabases()
 {
     std::vector<DatabaseInfo> mysqlDatabases;
     std::time_t currentTime = std::time(nullptr); // Get the current system time
@@ -144,7 +144,7 @@ std::vector<DatabaseInfo> DataBaseCrawler::detectMySQLDatabases()
     return mysqlDatabases;
 }
 
-std::vector<DatabaseInfo> DataBaseCrawler::detectSqliteDatabases()
+std::vector<DatabaseInfo> DatabaseCrawler::detectSqliteDatabases()
 {
     std::vector<DatabaseInfo> sqliteDatabases;
     std::time_t currentTime = std::time(nullptr); // Get the current system time
