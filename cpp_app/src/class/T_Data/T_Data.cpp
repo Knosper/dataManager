@@ -2,7 +2,7 @@
 #include "DatabaseCrawler.hpp"
 #include "utils.hpp"
 
-T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(SelectedMenuItem::StartPage)
+T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(AppConfig::SelectedMenuItem::StartPage)
 {
     std::cout << "default T_data created" << std::endl;
 }
@@ -34,7 +34,7 @@ void T_data::setIo(ImGuiIO* io)
     _io = io;
 }
 
-void T_data::setCurrentMenuItem(SelectedMenuItem menuItem) 
+void T_data::setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem) 
 {
     _currentMenuItem = menuItem;
 }
@@ -54,7 +54,7 @@ ImGuiIO* T_data::getIo()
     return _io;
 }
 
-SelectedMenuItem T_data::getCurrentMenuItem() const 
+AppConfig::SelectedMenuItem T_data::getCurrentMenuItem() const 
 {
     return _currentMenuItem;
 }

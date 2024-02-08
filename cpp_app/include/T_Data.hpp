@@ -5,51 +5,10 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "constants.h"
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
-
-#define _THUB_PATH "misc/Thub.jpg"
-#define _ICON_APPERANCE "misc/menu_icons/Icon_Apperance.png"
-#define _ICON_DATABASE_BACKUP "misc/menu_icons/Icon_Backup.png"
-#define _ICON_BUG "misc/menu_icons/Icon_Bug.jpg"
-#define _ICON_CREATE_DATABASE "misc/menu_icons/Icon_Create_Database.png"
-#define _ICON_DATABASE_LOGS "misc/menu_icons/Icon_Database_Logs.png"
-#define _ICON_DATABASE "misc/menu_icons/Icon_Database.png"
-#define _ICON_DELETE_DATABASE "misc/menu_icons/Icon_Delete_Database.png"
-#define _ICON_DOCS "misc/menu_icons/Icon_Docs.png"
-#define _ICON_DATABASE_IMPORT "misc/menu_icons/Icon_Import.png"
-#define _ICON_DATABASE_EXPORT "misc/menu_icons/Icon_Export.png"
-#define _ICON_HELP "misc/menu_icons/Icon_Help.png"
-#define _ICON_LIST_DATABASE "misc/menu_icons/Icon_List_Database.jpg"
-#define _ICON_MANAGE_CONNECTION "misc/menu_icons/Icon_Manage_Connection.png"
-#define _ICON_NEW_CONNECTION "misc/menu_icons/Icon_New_Connection.png"
-#define _ICON_PREFERENCES "misc/menu_icons/Icon_Preferences.png"
-#define _ICON_RESTORE "misc/menu_icons/Icon_Restore.png"
-#define _ICON_SETTINGS "misc/menu_icons/Icon_Settings.png"
-#define _ICON_TOOLS "misc/menu_icons/Icon_Tools.png"
-#define _ICON_UPDATE "misc/menu_icons/Icon_Update.png"
-#define _ICON_VISUALIZE_DATABASE "misc/menu_icons/Icon_Visualize_Database.png"
-
-enum class SelectedMenuItem 
-{
-    StartPage,
-    ListDatabases,
-    NewConnection,
-    ManageConnections,
-    ImportConnection,
-    ExportConnection,
-    CreateDatabase,
-    DeleteDatabase,
-    BackupDatabase,
-    RestoreDatabase,
-    VisualizeDatabase,
-    DatabaseLogs,
-    Preferences,
-    Appearance,
-    Docs,
-    CheckForUpdates
-};
 
 class T_data
 {
@@ -69,19 +28,19 @@ public:
     void                renderListDataBases(ImVec2 windowSize);
     void                renderBackground(ImVec2 windowSize);
     void                renderMenuBar();
-void renderDatabaseSearch();
+    void                renderDatabaseSearch();
 
     // Setter methods
     void                setBackgroundTextureID(const GLuint backgroundTextureID);
     void                setWindow(GLFWwindow* window);
     void                setIo(ImGuiIO* io);
-    void                setCurrentMenuItem(SelectedMenuItem menuItem);
+    void                setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem);
 
     // Getter methods
-    GLuint              getBackgroundTextureID() const;
-    GLFWwindow*         getWindow();
-    ImGuiIO*            getIo();
-    SelectedMenuItem    getCurrentMenuItem() const;
+    GLuint                          getBackgroundTextureID() const;
+    GLFWwindow*                     getWindow();
+    ImGuiIO*                        getIo();
+    AppConfig::SelectedMenuItem    getCurrentMenuItem() const;
 
 
     void cleanup();
@@ -91,11 +50,10 @@ void renderDatabaseSearch();
 private:
     GLuint                                  _backgroundTextureID;
     std::unordered_map<std::string, GLuint> _iconTextureIDs; 
-    GLFWwindow*                             _window;        
+    GLFWwindow*                             _window;      
     ImGuiIO*                                _io;            
-    SelectedMenuItem                        _currentMenuItem;
+    AppConfig::SelectedMenuItem             _currentMenuItem;
     
     void                addIconTextureID(const std::string& name, GLuint textureID);
     GLuint              getIconTextureID(const std::string& name) const;
-
 };
