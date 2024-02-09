@@ -38,7 +38,7 @@ namespace AppConfig {
     enum class SelectedMenuItem 
     {
         StartPage,
-        ListDatabases,
+        DetectDatabases,
         NewConnection,
         ManageConnections,
         ImportConnection,

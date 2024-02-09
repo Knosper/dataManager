@@ -25,7 +25,6 @@ public:
 
     // UI Render Methods
     void                renderSelected(const ImVec2& windowSize);
-    void                renderListDataBases(const ImVec2& windowSize);
     void                renderBackground(const ImVec2& windowSize);
     void                renderMenuBar();
     void                renderDatabaseSearch();
@@ -43,9 +42,17 @@ public:
     AppConfig::SelectedMenuItem     getCurrentMenuItem() const;
 
 
-    void cleanup();
-    bool mainLoop();
-    int initGui();
+    void    cleanup();
+    bool    mainLoop();
+    int     initGui();
+
+    //Menu detectDatabases
+    void renderDetectDatabases(const ImVec2& windowSize);
+    void                SetupStyles();
+    void                RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost);
+    void                RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6]);
+    void                RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[16]);
+
 
 private:
     GLuint                                  _backgroundTextureID;
