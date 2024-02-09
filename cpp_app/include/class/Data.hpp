@@ -14,7 +14,7 @@
 class Data
 {
 public:
-    std::size_t _cpuCores;    
+    std::size_t _cpuCores;
 
     //Constructor Destructor
     Data();
