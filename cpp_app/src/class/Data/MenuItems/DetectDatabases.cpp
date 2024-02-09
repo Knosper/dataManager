@@ -89,16 +89,27 @@ void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPor
     {
         DatabaseCrawler dbCrawler(startPort, endPort, startIp, endIp, currentDbType);
         std::vector<DatabaseInfo> databaseInfos = dbCrawler.detectDatabases();
-
         for (const auto& _info : databaseInfos) {
             std::cout << "------------------------" << std::endl;
+            std::cout << "Database Info: " << std::endl;
+            std::cout << "------------------------" << std::endl;
+            std::cout << "search options:" << std::endl;
+            std::cout << "Type: " << _info._type << std::endl;
+            std::cout << "Host: " << _info._host << std::endl;
+            std::cout << "dbName: " << _info._dbName << std::endl;
+            std::cout << "StartPort: " << _info._startPort << std::endl;
+            std::cout << "EndPort: " << _info._endPort << std::endl;
+            std::cout << "StartIp: " << _info._startIp << std::endl;
+            std::cout << "EndIp: " << _info._endIp << std::endl;
+            std::cout << "------------------------" << std::endl;
+            std::cout << "------------------------" << std::endl;
             std::cout << "StartTime: " << _info._scanStartTime << std::endl;
-            std::cout << "State: " << _info._state << std::endl;
-            std::cout << "databasetype: " << _info._type << std::endl;
-            std::cout << "databasehost: " << _info._host << std::endl;
             std::cout << "databaseport: " << _info._port << std::endl;
+            std::cout << "databaseip: " << _info._ip << std::endl;
+            std::cout << "State: " << _info._state << std::endl;
             std::cout << "databaseservice: " << _info._service << std::endl;
             std::cout << "databaseversion: " << _info._version << std::endl;
+            std::cout << "nmapoutput: " << _info._nmapOutput << std::endl;
             std::cout << "------------------------" << std::endl;
         }
         startPort[0] = '\0';
