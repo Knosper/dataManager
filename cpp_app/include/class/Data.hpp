@@ -9,10 +9,13 @@
 #include <unordered_map>
 #include <vector>
 #include <algorithm>
+#include <thread>
 
 class Data
 {
 public:
+    std::size_t _cpuCores;    
+
     //Constructor Destructor
     Data();
     ~Data();
@@ -52,7 +55,6 @@ public:
     void                RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost);
     void                RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6]);
     void                RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[16]);
-
 
 private:
     GLuint                                  _backgroundTextureID;

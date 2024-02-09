@@ -30,7 +30,8 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases()
     return detectedDatabases;
 }
 
-std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases() {
+std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases()
+{
     std::vector<DatabaseInfo> postgresDatabases;
     std::time_t currentTime = std::time(nullptr);
     std::string startTime = std::asctime(std::localtime(&currentTime));
@@ -42,12 +43,12 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases() {
     unsigned long startIpLong = ipToLong(this->_startIp);
     unsigned long endIpLong = ipToLong(this->_endIp);
 
-    for (unsigned long ip = startIpLong; ip <= endIpLong; ++ip) {
+    for (unsigned long ip = startIpLong; ip <= endIpLong; ++ip)
+    {
         std::string currentIp = longToIp(ip);
         for (int port = startPortInt; port <= endPortInt; ++port) {
             std::string nmapCommand = "nmap -p " + std::to_string(port) + " --open -sV " + currentIp;
             std::cout << "Executing: " << nmapCommand << std::endl;
-
             FILE* pipe = popen(nmapCommand.c_str(), "r");
             if (!pipe) {
                 std::cerr << "Failed to run nmap command" << std::endl;
@@ -68,11 +69,13 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases() {
             while (std::regex_search(searchStart, nmapOutput.cend(), serviceMatch, servicePattern)) {
                 if (serviceMatch.size() > 3) {
                     DatabaseInfo dbInfo;
-                    dbInfo._scanStartTime = startTime;
-                    dbInfo._state = serviceMatch[2].str();
                     dbInfo._type = "nmap";
                     dbInfo._host = currentIp;
+                    dbInfo._dbName = "Postgres" + std::to_string(port) + "_db";
+                    dbInfo._scanStartTime = startTime;
                     dbInfo._port = serviceMatch[1].str();
+                    dbInfo._ip = currentIp;
+                    dbInfo._state = serviceMatch[2].str();
                     dbInfo._service = "PostgreSQL";
                     dbInfo._version = serviceMatch[3].str();
                     dbInfo._nmapOutput = nmapOutput;

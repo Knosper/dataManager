@@ -97,10 +97,6 @@ void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPor
             std::cout << "Type: " << _info._type << std::endl;
             std::cout << "Host: " << _info._host << std::endl;
             std::cout << "dbName: " << _info._dbName << std::endl;
-            std::cout << "StartPort: " << _info._startPort << std::endl;
-            std::cout << "EndPort: " << _info._endPort << std::endl;
-            std::cout << "StartIp: " << _info._startIp << std::endl;
-            std::cout << "EndIp: " << _info._endIp << std::endl;
             std::cout << "------------------------" << std::endl;
             std::cout << "------------------------" << std::endl;
             std::cout << "StartTime: " << _info._scanStartTime << std::endl;

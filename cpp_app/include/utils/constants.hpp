@@ -18,10 +18,6 @@ struct DatabaseInfo
     std::string _type;    // Type of scan or protocol used for the scan
     std::string _host;    // IP address or hostname of the scanned server
     std::string _dbName;  // Database name (not applicable for nmap output)
-    std::string _startPort; // Start port for the scan
-    std::string _endPort; // End port for the scan
-    std::string _startIp; // Start IP for the scan
-    std::string _endIp; // End IP for the scan
 };
 
 namespace AppConfig {
