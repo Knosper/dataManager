@@ -10,11 +10,12 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <mutex>
 
 class Data
 {
 public:
-    std::size_t _cpuCores;
+    int _cpuCores;
 
     //Constructor Destructor
     Data();
@@ -30,7 +31,6 @@ public:
     void                renderSelected(const ImVec2& windowSize);
     void                renderBackground(const ImVec2& windowSize);
     void                renderMenuBar();
-    void                renderDatabaseSearch();
 
     // Setter methods
     void                setBackgroundTextureID(const GLuint& backgroundTextureID);
@@ -50,7 +50,7 @@ public:
     int     initGui();
 
     //Menu detectDatabases
-    void renderDetectDatabases(const ImVec2& windowSize);
+    void                renderDetectDatabases(const ImVec2& windowSize);
     void                SetupStyles();
     void                RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost);
     void                RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6]);

@@ -88,7 +88,7 @@ void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPor
     if (validInputs && ImGui::Button("Search##SearchButton", ImVec2(200, 40)))
     {
         DatabaseCrawler dbCrawler(startPort, endPort, startIp, endIp, currentDbType);
-        std::vector<DatabaseInfo> databaseInfos = dbCrawler.detectDatabases();
+        std::vector<DatabaseInfo> databaseInfos = dbCrawler.detectDatabases(*this);
         for (const auto& _info : databaseInfos) {
             std::cout << "------------------------" << std::endl;
             std::cout << "Database Info: " << std::endl;

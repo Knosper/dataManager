@@ -113,6 +113,7 @@ bool SqLite::executeQuery(const std::string& query) {
     return true;
 }
 
-std::vector<std::vector<std::string>> SqLite::getQueryResults() {
+std::vector<std::vector<std::string>> SqLite::getQueryResults()
+{
     return queryResults;
 }
