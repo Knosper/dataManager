@@ -1,8 +1,8 @@
-#include "T_Data.hpp"
+#include "Data.hpp"
 #include "DatabaseCrawler.hpp"
 #include "utils.hpp"
 
-void T_data::renderSelected(ImVec2 windowSize)
+void Data::renderSelected(const ImVec2& windowSize)
 {
     switch (this->getCurrentMenuItem())
     {
@@ -52,7 +52,7 @@ void T_data::renderSelected(ImVec2 windowSize)
     }
 }
 
-void T_data::renderMenuBar()
+void Data::renderMenuBar()
 {
     if (ImGui::BeginMainMenuBar())
     {
@@ -190,7 +190,7 @@ void T_data::renderMenuBar()
 }
 
 //complete window background
-void T_data::renderBackground(ImVec2 windowSize)
+void Data::renderBackground(const ImVec2& windowSize)
 {
     //render background image
     ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
@@ -226,7 +226,7 @@ void SetupStyles()
     ImGui::PushStyleColor(ImGuiCol_FrameBg, ImVec4(0.2f, 0.25f, 0.25f, 1.0f));
 }
 
-void RenderDatabaseTypeSelection(int& currentDbTypeIndex)
+static void RenderDatabaseTypeSelection(int& currentDbTypeIndex)
 {
     ImGui::Spacing();
     ImGui::Separator();
@@ -310,7 +310,7 @@ void RenderResetAndSearchButtons(std::string currentDbType, char* startPort, cha
 }
 
 // Main function for the first page "List Databases"
-void T_data::renderListDataBases(ImVec2 windowSize)
+void Data::renderListDataBases(const ImVec2& windowSize)
 {
     SetupStyles();
     ImGui::Begin("##DatabaseList", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);

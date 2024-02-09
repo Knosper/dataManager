@@ -1,13 +1,13 @@
-#include "T_Data.hpp"
+#include "Data.hpp"
 #include "DatabaseCrawler.hpp"
 #include "utils.hpp"
 
-T_data::T_data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(AppConfig::SelectedMenuItem::StartPage)
+Data::Data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(AppConfig::SelectedMenuItem::StartPage)
 {
-    std::cout << "default T_data created" << std::endl;
+    std::cout << "default data created" << std::endl;
 }
 
-T_data::~T_data()
+Data::~Data()
 {
     for (auto& pair : this->_iconTextureIDs)
     {
@@ -15,56 +15,56 @@ T_data::~T_data()
         glDeleteTextures(1, &textureID);
     }
     glDeleteTextures(1, &this->_backgroundTextureID);
-    std::cout << "T_data deleted" << std::endl;
+    std::cout << "Data deleted" << std::endl;
 }
 
 
-void T_data::setBackgroundTextureID(const GLuint backgroundTextureID)
+void Data::setBackgroundTextureID(const GLuint& backgroundTextureID)
 { 
     _backgroundTextureID = backgroundTextureID;
 }
 
-void T_data::setWindow(GLFWwindow* window)
+void Data::setWindow(GLFWwindow* window)
 {
     _window = window;
 }
 
-void T_data::setIo(ImGuiIO* io)
+void Data::setIo(ImGuiIO* io)
 {
     _io = io;
 }
 
-void T_data::setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem) 
+void Data::setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem) 
 {
     _currentMenuItem = menuItem;
 }
 
-GLuint T_data::getBackgroundTextureID() const 
+GLuint Data::getBackgroundTextureID() const 
 {
     return _backgroundTextureID;
 }
 
-GLFWwindow* T_data::getWindow() const
+GLFWwindow* Data::getWindow() const
 {
     return _window;
 }
 
-ImGuiIO* T_data::getIo() const
+ImGuiIO* Data::getIo() const
 {
     return _io;
 }
 
-AppConfig::SelectedMenuItem T_data::getCurrentMenuItem() const 
+AppConfig::SelectedMenuItem Data::getCurrentMenuItem() const 
 {
     return _currentMenuItem;
 }
 
-void T_data::addIconTextureID(const std::string& name, const GLuint& textureID)
+void Data::addIconTextureID(const std::string& name, const GLuint& textureID)
 {
     this->_iconTextureIDs[name] = textureID;
 }
 
-GLuint T_data::getIconTextureID(const std::string& name) const
+GLuint Data::getIconTextureID(const std::string& name) const
 {
     auto it = this->_iconTextureIDs.find(name);
     if (it != this->_iconTextureIDs.end()) {
@@ -105,7 +105,7 @@ static bool initializeWindow(GLFWwindow** outWindow)
     return true;
 }
 
-int T_data::initImgui()
+int Data::initImgui()
 {
     // Create window with graphics context
     ImGuiIO io;
@@ -135,7 +135,7 @@ int T_data::initImgui()
     return (EXIT_SUCCESS);
 }
 
-bool T_data::setupImGui()
+bool Data::setupImGui()
 {
     const char* glsl_version = "#version 130";
     // Check for valid window pointer
@@ -163,7 +163,7 @@ bool T_data::setupImGui()
 }
 
 // ########################### Cleanup function ###########################
-void T_data::cleanup()
+void Data::cleanup()
 {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -175,7 +175,7 @@ void T_data::cleanup()
 }
 
 // ########################### MainLoop ###########################
-bool T_data::mainLoop()
+bool Data::mainLoop()
 {
     while (!glfwWindowShouldClose(getWindow()))
     {
@@ -204,7 +204,7 @@ bool T_data::mainLoop()
 }
 
 // ########################### Main app (Init & cleanup) ###########################
-int T_data::initGui()
+int Data::initGui()
 {
     //init window && io && textures
     if (initImgui())

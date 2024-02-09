@@ -8,12 +8,12 @@ IMGUI_DIR := ../imgui
 # Define the directory for object files
 OBJDIR := obj
 
-DIRS := $(OBJDIR) $(OBJDIR)/utils $(OBJDIR)/class $(OBJDIR)/class/T_Data $(OBJDIR)/class/Database
+DIRS := $(OBJDIR) $(OBJDIR)/utils $(OBJDIR)/class $(OBJDIR)/class/Data $(OBJDIR)/class/Database
 
 # Define the C++ source files for ImGui and for your project
 IMGUI_SOURCES := $(IMGUI_DIR)/imgui.cpp $(IMGUI_DIR)/imgui_demo.cpp $(IMGUI_DIR)/imgui_draw.cpp $(IMGUI_DIR)/imgui_tables.cpp $(IMGUI_DIR)/imgui_widgets.cpp
 IMGUI_SOURCES += $(IMGUI_DIR)/backends/imgui_impl_glfw.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
-SRCS := $(wildcard src/*.cpp) $(wildcard src/utils/*.cpp) $(wildcard src/class/*.cpp) $(wildcard src/class/T_Data/*.cpp) $(wildcard src/class/Database/*.cpp)
+SRCS := $(wildcard src/*.cpp) $(wildcard src/utils/*.cpp) $(wildcard src/class/*.cpp) $(wildcard src/class/Data/*.cpp) $(wildcard src/class/Database/*.cpp)
 
 
 # Define the C++ object files for ImGui and for your project
@@ -21,7 +21,7 @@ IMGUI_OBJS := $(addprefix $(OBJDIR)/, $(notdir $(IMGUI_SOURCES:.cpp=.o)))
 OBJS := $(SRCS:src/%.cpp=$(OBJDIR)/%.o)
 OBJS := $(OBJS:src/utils/%.cpp=$(OBJDIR)/utils/%.o)
 OBJS := $(OBJS:src/class/%.cpp=$(OBJDIR)/class/%.o)
-OBJS := $(OBJS:src/class/T_Data/%.cpp=$(OBJDIR)/class/T_Data/%.o)
+OBJS := $(OBJS:src/class/Data/%.cpp=$(OBJDIR)/class/Data/%.o)
 OBJS := $(OBJS:src/class/Database/%.cpp=$(OBJDIR)/class/Database/%.o)
 
 # Include paths for ImGui and the backends
@@ -62,8 +62,8 @@ $(OBJDIR)/utils/%.o: src/utils/%.cpp | $(OBJDIR)/utils
 $(OBJDIR)/class/%.o: src/class/%.cpp | $(OBJDIR)/class
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Pattern rule for project source files in the src/class/T_Data directory
-$(OBJDIR)/class/T_Data/%.o: src/class/T_Data/%.cpp | $(OBJDIR)/class/T_Data
+# Pattern rule for project source files in the src/class/Data directory
+$(OBJDIR)/class/Data/%.o: src/class/Data/%.cpp | $(OBJDIR)/class/Data
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
 # Pattern rule for project source files in the src/class/Database directory

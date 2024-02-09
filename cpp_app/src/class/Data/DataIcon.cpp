@@ -1,4 +1,4 @@
-#include "T_Data.hpp"
+#include "Data.hpp"
 #include "utils.hpp"
 #ifndef STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_IMPLEMENTATION
@@ -8,7 +8,7 @@
       #define STB_IMAGE_IMPLEMENTATION
    before you include this file (stb_image.h) in *one* C or C++ file to create the implementation.*/
 
-void T_data::loadIcons()
+void Data::loadIcons()
 {
     this->addIconTextureID(AppConfig::_ICON_APPERANCE, loadImage(AppConfig::_ICON_APPERANCE));
     this->addIconTextureID(AppConfig::_ICON_DATABASE_BACKUP, loadImage(AppConfig::_ICON_DATABASE_BACKUP));
@@ -32,7 +32,7 @@ void T_data::loadIcons()
     this->addIconTextureID(AppConfig::_ICON_VISUALIZE_DATABASE, loadImage(AppConfig::_ICON_VISUALIZE_DATABASE));
 }
 
-GLuint T_data::loadImage(const char* imagePath)
+GLuint Data::loadImage(const char* imagePath)
 {
     // Load the image using stb_image
     int width, height, channels;
