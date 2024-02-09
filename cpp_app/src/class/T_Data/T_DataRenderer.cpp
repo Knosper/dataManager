@@ -301,6 +301,11 @@ void RenderResetAndSearchButtons(std::string currentDbType, char* startPort, cha
             std::cout << "databaseversion: " << _info._version << std::endl;
             std::cout << "------------------------" << std::endl;
         }
+        startPort[0] = '\0';
+        endPort[0] = '\0';
+        startIp[0] = '\0';
+        endIp[0] = '\0';
+        useLocalhost = false;
     }
 }
 

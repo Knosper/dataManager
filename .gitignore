@@ -2,5 +2,6 @@
 env.sh
 obj/*
 cpp_app/dataManager
+cpp_app/combined_code.txt
 *.ini
 *.o
