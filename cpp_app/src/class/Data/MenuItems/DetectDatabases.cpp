@@ -32,7 +32,8 @@ static void RenderDatabaseTypeSelection(int& currentDbTypeIndex)
     ImGui::Separator();
     ImGui::Spacing();
     static const char* dbTypes[] = {"PostgreSQL", "MySQL", "Sqlite"};
-    ImGui::Text("Set Database Type, search will be based on this type of database");
+    ImGui::Text("Set Database Type:");
+    ImGui::SetNextItemWidth(100);
     ImGui::Combo("##DatabaseType", &currentDbTypeIndex, dbTypes, IM_ARRAYSIZE(dbTypes));
 }
 
@@ -50,6 +51,7 @@ void Data::RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&en
     {
         ImGui::Text("Start IP:");
         ImGui::SameLine();
+        ImGui::SetNextItemWidth(100);
         if (ImGui::InputText("##StartIP", startIp, IM_ARRAYSIZE(startIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress))
         {
             // Validate the IP address whenever the input changes
@@ -61,6 +63,7 @@ void Data::RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&en
         }
         ImGui::Text("  End IP:");
         ImGui::SameLine();
+        ImGui::SetNextItemWidth(100);
         if (ImGui::InputText("##EndIP", endIp, IM_ARRAYSIZE(endIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress))
         {
             endIpValid = isValidIpAddress(endIp);
@@ -77,16 +80,18 @@ void Data::RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&en
 }
 
 void Data::RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6])
-{
+{ 
     ImGui::Spacing();
     ImGui::Separator();
     ImGui::Spacing();
     ImGui::Text("Port range to scan for databases");
     ImGui::Text("Start port:");
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(100);
     ImGui::InputText("##StartPort", startPort, IM_ARRAYSIZE(startPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabasePort);
     ImGui::Text("  End port:");
     ImGui::SameLine();
+    ImGui::SetNextItemWidth(100);
     ImGui::InputText("##EndPort", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabasePort);
 }
 
@@ -152,7 +157,9 @@ void Data::renderDetectDatabases(const ImVec2& windowSize)
         static char endIp[16] = "";
         static char startPort[6] = "";
         static char endPort[6] = "";
-        ImGui::TextColored(ImVec4(0.0f, 0.0f, 1.0f, 1.0f), "Database Search Options:"); // Use TextColored to highlight the topic with blue color
+        ImGui::SetWindowFontScale(1.5f); 
+        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Database Search Options:"); // Use TextColored to highlight the topic with blue color
+        ImGui::SetWindowFontScale(1.0f);
         // Dropdown menu for database type selection
         RenderDatabaseTypeSelection(currentDbTypeIndex);
         RenderIPRangeInput(useLocalhost, startIp, endIp);

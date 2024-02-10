@@ -5,8 +5,6 @@
 #include <string>
 #include <sstream>
 
-
-int CharFilterDatabaseName(ImGuiInputTextCallbackData* data);
 int CharFilterDatabasePort(ImGuiInputTextCallbackData* data);
 int CharFilterIpAddress(ImGuiInputTextCallbackData* data);
 bool isValidIpAddress(const char* ipAddress);
