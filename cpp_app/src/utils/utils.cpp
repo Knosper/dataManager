@@ -17,26 +17,18 @@ int CharFilterDatabasePort(ImGuiInputTextCallbackData* data)
 {
     if (isdigit((unsigned char)data->EventChar))
     {
-        return 0;
+        return (false);
     }
-    return 1;
-}
-
-bool isValidIpAddress(const std::string& ip) {
-    std::regex ipPattern(
-        "^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}"
-        "(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$");
-    return std::regex_match(ip, ipPattern);
+    return (true);
 }
 
 int CharFilterIpAddress(ImGuiInputTextCallbackData* data)
 {
     if (isdigit((unsigned char)data->EventChar) || (data->EventChar == '.'))
     {
-        return 0; // Allow the character
+        return (false); // Allow the character
     }
-    
-    return 1; // Block the character
+    return (true);
 }
 
 unsigned long ipToLong(const std::string& ip)
@@ -58,4 +50,38 @@ std::string longToIp(const unsigned long& val)
     ss << ((val >> 8) & 0xFF) << '.';
     ss << (val & 0xFF);
     return ss.str();
+}
+
+bool isValidIpAddress(const char* ipAddress)
+{
+    int dots = 0;
+    const char* ptr = ipAddress;
+
+    if (ipAddress == nullptr) 
+        return (false);
+
+    while (*ptr)
+    {
+        if (*ptr == '.')
+        {
+            if (ptr == ipAddress) 
+                return (false); // dot can't be at the beginning
+            if (!isdigit(*(ptr-1))) 
+                return (false); // dot follows a non-digit
+            dots++;
+        }
+        else if (!isdigit(*ptr))
+            return (false);
+        ptr++;
+    }
+    if (dots != 3)
+        return false; // an IP address must contain 3 dots
+    // Re-checking each segment
+    std::istringstream stream(ipAddress);
+    std::string segment;
+    while (std::getline(stream, segment, '.'))
+    {
+        if (segment.empty() || stoi(segment) > 255 || stoi(segment) < 0) return false;
+    }
+    return (true);
 }

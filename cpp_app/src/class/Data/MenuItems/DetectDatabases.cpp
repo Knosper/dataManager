@@ -42,15 +42,33 @@ void Data::RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&en
     ImGui::Separator();
     ImGui::Spacing();
     ImGui::Checkbox("Scan localhost instead of IP range", &useLocalhost);
+
+    static bool startIpValid = true;
+    static bool endIpValid = true;    
+
     if (!useLocalhost)
     {
         ImGui::Text("Start IP:");
         ImGui::SameLine();
-        ImGui::InputText("##StartIP", startIp, IM_ARRAYSIZE(startIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
-        
+        if (ImGui::InputText("##StartIP", startIp, IM_ARRAYSIZE(startIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress))
+        {
+            // Validate the IP address whenever the input changes
+            startIpValid = isValidIpAddress(startIp);
+        }
+        if (!startIpValid)
+        {
+            ImGui::TextColored(ImVec4(1,0,0,1), "Invalid IP address");
+        }
         ImGui::Text("  End IP:");
         ImGui::SameLine();
-        ImGui::InputText("##EndIP", endIp, IM_ARRAYSIZE(endIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress);
+        if (ImGui::InputText("##EndIP", endIp, IM_ARRAYSIZE(endIp), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterIpAddress))
+        {
+            endIpValid = isValidIpAddress(endIp);
+        }
+        if (!endIpValid)
+        {
+            ImGui::TextColored(ImVec4(1,0,0,1), "Invalid IP address");
+        }
     } else
     {
         strcpy(startIp, "127.0.0.1");
@@ -66,10 +84,10 @@ void Data::RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6])
     ImGui::Text("Port range to scan for databases");
     ImGui::Text("Start port:");
     ImGui::SameLine();
-    ImGui::InputText("##StartPort", startPort, IM_ARRAYSIZE(startPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
+    ImGui::InputText("##StartPort", startPort, IM_ARRAYSIZE(startPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabasePort);
     ImGui::Text("  End port:");
     ImGui::SameLine();
-    ImGui::InputText("##EndPort", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank, CharFilterDatabasePort);
+    ImGui::InputText("##EndPort", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabasePort);
 }
 
 void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost)

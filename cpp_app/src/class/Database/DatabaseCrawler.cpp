@@ -107,9 +107,16 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectPostgreSQLDatabases(const Data&
     // Convert start and end ports to integers for the loop
     searchOptions.startPort = std::stoi(this->_startPort);
     searchOptions.endPort = std::stoi(this->_endPort);
+    if (searchOptions.startPort > searchOptions.endPort) 
+    {
+        std::swap(searchOptions.startPort, searchOptions.endPort);
+    }
     searchOptions.startIp = ipToLong(this->_startIp);
     searchOptions.endIp = ipToLong(this->_endIp);
-
+    if (searchOptions.startIp > searchOptions.endIp)
+    {
+        std::swap(searchOptions.startIp, searchOptions.endIp);
+    }
     std::vector<std::thread> threads;
     std::mutex database_vector_mutex;
 
