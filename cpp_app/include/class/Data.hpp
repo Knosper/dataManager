@@ -37,24 +37,27 @@ public:
     void                setWindow(GLFWwindow* window);
     void                setIo(ImGuiIO* io);
     void                setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem);
+    void                setDataBaseInfos(const std::vector<DatabaseInfo>& databaseInfos);
 
     // Getter methods
     GLuint                          getBackgroundTextureID() const;
     GLFWwindow*                     getWindow() const;
     ImGuiIO*                        getIo() const;
     AppConfig::SelectedMenuItem     getCurrentMenuItem() const;
-
+    std::vector<DatabaseInfo>       getDataBaseInfos() const;
+    
 
     void    cleanup();
     bool    mainLoop();
     int     initGui();
 
     //Menu detectDatabases
-    void                renderDetectDatabases(const ImVec2& windowSize);
-    void                SetupStyles();
-    void                RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost);
-    void                RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6]);
-    void                RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[16]);
+    void                                    renderDetectDatabases(const ImVec2& windowSize);
+    void                                    SetupStyles();
+    std::vector<DatabaseInfo>               RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost);
+    void                                    RenderSearchResultTable();
+    void                                    RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6]);
+    void                                    RenderIPRangeInput(bool& useLocalhost, char (&startIp)[16], char (&endIp)[16]);
 
 private:
     GLuint                                  _backgroundTextureID;
@@ -62,6 +65,7 @@ private:
     GLFWwindow*                             _window;      
     ImGuiIO*                                _io;            
     AppConfig::SelectedMenuItem             _currentMenuItem;
+    std::vector<DatabaseInfo>               _databaseInfos;
     
     //private methods
     void                addIconTextureID(const std::string& name, const GLuint& textureID);

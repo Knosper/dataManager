@@ -2,7 +2,7 @@
 #include "DatabaseCrawler.hpp"
 #include "utils.hpp"
 
-Data::Data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(AppConfig::SelectedMenuItem::StartPage)
+Data::Data():_backgroundTextureID(), _iconTextureIDs(), _window(), _io(), _currentMenuItem(AppConfig::SelectedMenuItem::StartPage), _databaseInfos()
 {
     std::cout << "default data created" << std::endl;
 }
@@ -39,24 +39,29 @@ void Data::setCurrentMenuItem(AppConfig::SelectedMenuItem menuItem)
     _currentMenuItem = menuItem;
 }
 
+void Data::setDataBaseInfos(const std::vector<DatabaseInfo>& databaseInfos)
+{
+    _databaseInfos.insert(_databaseInfos.end(), databaseInfos.begin(), databaseInfos.end());
+}
+
 GLuint Data::getBackgroundTextureID() const 
 {
-    return _backgroundTextureID;
+    return (_backgroundTextureID);
 }
 
 GLFWwindow* Data::getWindow() const
 {
-    return _window;
+    return (_window);
 }
 
 ImGuiIO* Data::getIo() const
 {
-    return _io;
+    return (_io);
 }
 
 AppConfig::SelectedMenuItem Data::getCurrentMenuItem() const 
 {
-    return _currentMenuItem;
+    return (_currentMenuItem);
 }
 
 void Data::addIconTextureID(const std::string& name, const GLuint& textureID)
@@ -71,6 +76,11 @@ GLuint Data::getIconTextureID(const std::string& name) const
         return it->second;
     }
     return (0);
+}
+
+std::vector<DatabaseInfo> Data::getDataBaseInfos() const
+{
+    return (_databaseInfos);
 }
 
 static void glfw_error_callback(int error, const char* description)

@@ -95,7 +95,7 @@ void Data::RenderPortRangeInput(char (&startPort)[6], char (&endPort)[6])
     ImGui::InputText("##EndPort", endPort, IM_ARRAYSIZE(endPort), ImGuiInputTextFlags_CharsDecimal | ImGuiInputTextFlags_CharsNoBlank | ImGuiInputTextFlags_CallbackCharFilter, CharFilterDatabasePort);
 }
 
-void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost)
+std::vector<DatabaseInfo> Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPort, char* endPort, char* startIp, char* endIp, bool& useLocalhost)
 {
     // Buttons for actions
     if (ImGui::Button("Reset##ResetButton", ImVec2(200, 40)))
@@ -136,6 +136,63 @@ void Data::RenderResetAndSearchButtons(std::string currentDbType, char* startPor
         startIp[0] = '\0';
         endIp[0] = '\0';
         useLocalhost = false;
+        return (databaseInfos);
+    }
+    return (std::vector<DatabaseInfo>());
+}
+
+// Implement this based on your data structure
+void SortData(std::vector<DatabaseInfo>& items, const ImGuiTableSortSpecs* sortSpecs)
+{
+    std::cout << "Todo: Implement sorting" << std::endl;
+}
+
+void Data::RenderSearchResultTable()
+{
+    ImGuiTableFlags flags = ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable
+                            | ImGuiTableFlags_RowBg | ImGuiTableFlags_Borders | ImGuiTableFlags_NoBordersInBody
+                            | ImGuiTableFlags_ScrollY | ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_Sortable;
+
+    // Begin the table with a specified number of columns
+    if (ImGui::BeginTable("##SearchResultTable", 8, flags))
+    {
+        ImGui::TableSetupScrollFreeze(0, 1); 
+        ImGui::TableSetupColumn("#", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("DB Name", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("Scan Start Time", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("Port", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("IP", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("State", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("Service", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableSetupColumn("Version", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultSort);
+        ImGui::TableHeadersRow();
+        const ImGuiTableSortSpecs* sortSpecs = ImGui::TableGetSortSpecs();
+        if (sortSpecs && sortSpecs->SpecsDirty)
+        {
+            SortData(_databaseInfos, sortSpecs);
+            ImGui::TableGetSortSpecs()->SpecsDirty = false;
+        }
+        for (int row = 0; row < static_cast<int>(_databaseInfos.size()); row++)
+        {
+            ImGui::TableNextRow();
+            for (int column = 0; column < 8; column++)
+            {
+                ImGui::TableSetColumnIndex(column);
+                const auto& dbInfo = _databaseInfos[row];
+                switch (column)
+                {
+                    case 0: ImGui::Text("%d", row + 1); break;
+                    case 1: ImGui::Text("%s", dbInfo._dbName.c_str()); break;
+                    case 2: ImGui::Text("%s", dbInfo._scanStartTime.c_str()); break;
+                    case 3: ImGui::Text("%s", dbInfo._port.c_str()); break;
+                    case 4: ImGui::Text("%s", dbInfo._ip.c_str()); break;
+                    case 5: ImGui::Text("%s", dbInfo._state.c_str()); break;
+                    case 6: ImGui::Text("%s", dbInfo._service.c_str()); break;
+                    case 7: ImGui::Text("%s", dbInfo._version.c_str()); break;
+                }
+            }
+        }
+        ImGui::EndTable();
     }
 }
 
@@ -148,26 +205,24 @@ void Data::renderDetectDatabases(const ImVec2& windowSize)
     // Add more space between style setup and GUI elements
     ImGui::SetWindowPos(ImVec2(0, 20), ImGuiCond_Always);
     ImGui::SetWindowSize(windowSize, ImGuiCond_Always);
-    if (this->getCurrentMenuItem() == AppConfig::SelectedMenuItem::DetectDatabases)
-    {
-        static const char* dbTypes[] = {"PostgreSQL", "MySQL", "Sqlite"};
-        static int currentDbTypeIndex = 0;
-        static bool useLocalhost = false;
-        static char startIp[16] = "";
-        static char endIp[16] = "";
-        static char startPort[6] = "";
-        static char endPort[6] = "";
-        ImGui::SetWindowFontScale(1.5f); 
-        ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Database Search Options:"); // Use TextColored to highlight the topic with blue color
-        ImGui::SetWindowFontScale(1.0f);
-        // Dropdown menu for database type selection
-        RenderDatabaseTypeSelection(currentDbTypeIndex);
-        RenderIPRangeInput(useLocalhost, startIp, endIp);
-        RenderPortRangeInput(startPort, endPort);
-        bool validInputs = (useLocalhost && strlen(startPort) > 0 && strlen(endPort) > 0) || (isValidIpAddress(startIp) && isValidIpAddress(endIp) && strlen(startPort) > 0 && strlen(endPort) > 0);
-        if (validInputs)
-            RenderResetAndSearchButtons(dbTypes[currentDbTypeIndex], startPort, endPort, startIp, endIp, useLocalhost);
-    }
+    static const char* dbTypes[] = {"PostgreSQL", "MySQL", "Sqlite"};
+    static int currentDbTypeIndex = 0;
+    static bool useLocalhost = false;
+    static char startIp[16] = "";
+    static char endIp[16] = "";
+    static char startPort[6] = "";
+    static char endPort[6] = "";
+    ImGui::SetWindowFontScale(1.5f); 
+    ImGui::TextColored(ImVec4(1.0f, 1.0f, 0.0f, 1.0f), "Database Search Options:"); // Use TextColored to highlight the topic with blue color
+    ImGui::SetWindowFontScale(1.0f);
+    // Dropdown menu for database type selection
+    RenderDatabaseTypeSelection(currentDbTypeIndex);
+    RenderIPRangeInput(useLocalhost, startIp, endIp);
+    RenderPortRangeInput(startPort, endPort);
+    bool validInputs = (useLocalhost && strlen(startPort) > 0 && strlen(endPort) > 0) || (isValidIpAddress(startIp) && isValidIpAddress(endIp) && strlen(startPort) > 0 && strlen(endPort) > 0);
+    if (validInputs)
+        this->setDataBaseInfos(RenderResetAndSearchButtons(dbTypes[currentDbTypeIndex], startPort, endPort, startIp, endIp, useLocalhost));
+    RenderSearchResultTable();
     //TODO: Add Table to show the results of the search
     ImGui::PopStyleColor(6); // Pop style colors for text, buttons
     ImGui::PopStyleVar(5); // Pop style var

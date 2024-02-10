@@ -28,7 +28,7 @@ public:
     ~DatabaseCrawler();
 
     // Function to detect databases. Returns a list of detected database info.
-    std::vector<DatabaseInfo> detectDatabases(const Data& data);
+    std::vector<DatabaseInfo>   detectDatabases(const Data& data);
 
 private:
     // Functions to detect specific types of databases
