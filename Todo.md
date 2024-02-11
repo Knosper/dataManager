@@ -1,8 +1,9 @@
-# Datenbanken auflisten:
+## RenderSearchResultTable sort columns
+- implement SortData
 
-- ip input should give feedback
-- port input should give feedback
+- add buttons to save or delete entrys
+
+# 
 
 ## implement second search method:
-
 - systemctl status postgresql (detect db on sys)
