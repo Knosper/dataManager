@@ -1,4 +1,4 @@
-// Constants.h
+// constants.h
 #pragma once
 
 #include <string>

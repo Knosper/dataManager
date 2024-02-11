@@ -1,3 +1,4 @@
+//Database.cpp
 #include "Database.hpp"
 
 MySql::MySql(const std::string& host, const std::string& user, const std::string& pwd, const std::string& dbName): t_Database(host, user, pwd, dbName), connection(nullptr)
