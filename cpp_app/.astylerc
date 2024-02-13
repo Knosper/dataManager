@@ -1,0 +1,6 @@
+style=kr
+indent=spaces=4
+indent-switches
+add-braces
+max-code-length=80
+break-after-logical

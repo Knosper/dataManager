@@ -45,7 +45,7 @@ public:
     GLFWwindow*                     getWindow() const;
     ImGuiIO*                        getIo() const;
     AppConfig::SelectedMenuItem     getCurrentMenuItem() const;
-    std::vector<DatabaseInfo>       getDataBaseInfos() const;
+    std::vector<DatabaseInfo>       getDataBaseInfos()  const;
     
 
     void    cleanup();
