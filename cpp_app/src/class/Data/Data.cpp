@@ -183,6 +183,7 @@ void Data::cleanup()
 bool Data::mainLoop()
 {
 	while (!glfwWindowShouldClose(getWindow())) {
+	    signal(SIGINT, SIG_DFL);
 		glfwPollEvents();
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();

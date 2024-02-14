@@ -9,6 +9,7 @@
 #include <iostream>
 #include <regex>
 #include <ctime>
+#include <csignal>
 
 typedef struct s_searchOptions
 {

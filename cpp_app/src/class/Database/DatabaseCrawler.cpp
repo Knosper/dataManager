@@ -33,6 +33,7 @@ std::vector<DatabaseInfo> DatabaseCrawler::detectDatabases(const Data& data)
 
 static void parseNmapOutput(const std::string& nmapOutput, std::vector<DatabaseInfo>& databases, t_searchOptions searchOptions, std::mutex& database_vector_mutex)
 {
+    std::cout << "\n\nfull output: " << nmapOutput.size() << "\n\n" << std::endl;
     std::regex servicePattern("(\\d+)/tcp\\s+(\\S+)\\s+[^\\s]+\\s+PostgreSQL\\s+(.*)");
     std::smatch serviceMatch;
     std::string::const_iterator searchStart(nmapOutput.cbegin());
@@ -59,36 +60,43 @@ static void parseNmapOutput(const std::string& nmapOutput, std::vector<DatabaseI
     }
 }
 
+
+static int sigHandler(int sig)
+{
+    static int mem;
+    if (sig == SIGINT)
+        mem = 42;
+    return (mem);
+}
+
 static int scanPortRangeForPostgres(int startPort, int endPort, t_searchOptions searchOptions, std::vector<DatabaseInfo>& postgresDatabases, std::mutex& database_vector_mutex)
 {
+    signal(SIGINT, (sighandler_t)sigHandler);
     for (unsigned long ipLong = searchOptions.startIp; ipLong <= searchOptions.endIp; ipLong++)
     {
         searchOptions.currentIp = longToIp(ipLong);
         for (int port = startPort; port <= endPort; ++port)
         {
-            std::string nmapCommand = "nmap -p " + std::to_string(port) + " --open -sV " + searchOptions.currentIp;
-            std::cout << "Executing: " << nmapCommand << std::endl;
-            try
-            {
-                FILE* pipe = popen(nmapCommand.c_str(), "r");
-                if (!pipe) {
-                    std::cerr << "Failed to run nmap command" << std::endl;
-                    continue;
-                }
-                std::string nmapOutput;
-                char buffer[128];
-                while (!feof(pipe)) {
-                    if (fgets(buffer, 128, pipe) != nullptr) {
-                        nmapOutput += buffer;
-                    }
-                }
-                pclose(pipe);
-                parseNmapOutput(nmapOutput, postgresDatabases, searchOptions, database_vector_mutex);
+            std::string nmapCommand = "nmap -p " + std::to_string(port) + " --open -sV " + searchOptions.currentIp + " -Pn";
+            //std::cout << "Executing: " << nmapCommand << std::endl;
+            FILE* pipe = popen(nmapCommand.c_str(), "r");
+            if (!pipe) {
+                std::cerr << "Failed to run nmap command" << std::endl;
+                continue;
             }
-            catch (std::exception& e)
+            std::string nmapOutput;
+            char buffer[128];
+            while (!feof(pipe)) {
+                if (fgets(buffer, 128, pipe) != nullptr) {
+                    nmapOutput += buffer;
+                }
+            }
+            pclose(pipe);
+            parseNmapOutput(nmapOutput, postgresDatabases, searchOptions, database_vector_mutex);
+            if (sigHandler(0) == 42)
             {
-                std::cerr << "Error running nmap command: " << e.what() << std::endl;
-                return (EXIT_FAILURE);
+                std::cout << "Exiting scanPortRangeForPostgres" << std::endl;
+                return (EXIT_SUCCESS);
             }
         }
     }
