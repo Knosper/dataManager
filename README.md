@@ -1,6 +1,6 @@
 # My Dear ImGui Gui Project early state
 
-This project is a scanner in a C++ project to create a interactive GUI.
+This project is a scanner in a C++, to create a interactive GUI & 2learn nmap.
 
 https://github.com/ocornut/imgui
 
