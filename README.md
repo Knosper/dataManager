@@ -1,6 +1,6 @@
-# My Dear ImGui Project early state
+# My Dear ImGui Gui Project early state
 
-This project is my example of using Dear ImGui in a C++ project to create a interactive GUI. It is designed as a starting point for anyone looking to integrate Dear ImGui into their C++ applications.
+This project is a scanner in a C++ project to create a interactive GUI.
 
 https://github.com/ocornut/imgui
 
@@ -38,7 +38,6 @@ git clone --recurse-submodules git@github.com:Knosper/dataManager.git
 
 Navigate to the project directory and run the Makefile:
 
-cd My-Dear-Imgui-example
 make
 
 
@@ -54,5 +53,5 @@ This stb_image is open-sourced under the MIT license. See the [LICENSE.md](http:
 
 ## Acknowledgments
 
-- Thanks to the creators and contributors of Dear ImGui && stb_image for their fantastic library.
+- Thanks to the creators and contributors of Dear ImGui && stb_image for their fantastic librarys.
 - https://github.com/ocornut/imgui
