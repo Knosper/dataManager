@@ -32,7 +32,7 @@ sudo apt-get install libglfw3 libglfw3-dev libgl1-mesa-dev libglew-dev
 
 Clone the repository and its submodules using the following command:
 
-git clone --recurse-submodules https://github.com/Knosper/My-Dear-Imgui-example.git
+git clone --recurse-submodules git@github.com:Knosper/dataManager.git
 
 ### Building the Project
 
