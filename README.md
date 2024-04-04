@@ -1,4 +1,4 @@
-# My Dear ImGui Example (This is meant to serve as a starting point)
+# My Dear ImGui Project early state
 
 This project is my example of using Dear ImGui in a C++ project to create a interactive GUI. It is designed as a starting point for anyone looking to integrate Dear ImGui into their C++ applications.
 
